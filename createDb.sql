@@ -1,4 +1,6 @@
+/*DROP DATABASE IF EXISTS Capstone;*/
 CREATE DATABASE IF NOT EXISTS Capstone;
+
 
 CREATE TABLE IF NOT EXISTS Capstone.professors (
 	uin CHAR(9) NOT NULL PRIMARY KEY,
@@ -7,6 +9,7 @@ CREATE TABLE IF NOT EXISTS Capstone.professors (
     cardNum VARCHAR(64) NOT NULL
 );
 
+
 CREATE TABLE IF NOT EXISTS Capstone.students (
 	uin CHAR(9) NOT NULL PRIMARY KEY,
     firstName VARCHAR(20) NOT NULL,
@@ -14,11 +17,11 @@ CREATE TABLE IF NOT EXISTS Capstone.students (
     cardNum VARCHAR(64) NOT NULL
 ); 
 
+
 CREATE TABLE IF NOT EXISTS Capstone.courses (
-	course_id CHAR(12) PRIMARY KEY,
-	uin CHAR(9) FOREIGN KEY REFERENCES Capstone.professors(uin)
+	course_id CHAR(12),
+	uin CHAR(9),
+    PRIMARY KEY (course_id),
+    FOREIGN KEY (uin) REFERENCES Capstone.professors(uin)
 );
-
-
-
 
