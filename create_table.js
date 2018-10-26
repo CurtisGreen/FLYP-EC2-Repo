@@ -13,13 +13,13 @@ function gen_Create_Table(class_name) {
 	
 	/*
 	CREATE TABLE IF NOT EXISTS &&class_name&& {
-		stu_UIN INT(9) FOREIGN KEY REFERENCES Students(stu_UIN),
-		
+		uin CHAR(9),
+		FOREIGN KEY (uin) REFERENCES Capstone.students(uin)
 	}
 	*/
 	
 	
-	create_tbl_command = "CREATE TABLE IF NOT EXISTS " + class_name + " { stu_UIN INT(9) FOREIGN KEY REFERENCES Students(stu_UIN) }";
+	create_tbl_command = "CREATE TABLE IF NOT EXISTS " + class_name + " { uin CHAR(9), FOREIGN KEY (uin) REFERENCES Capstone.students(uin) }";
 	
 	
 }
@@ -84,3 +84,36 @@ function add_professor(professor_uin_in,professor_first_in,professor_last_in,pro
 }
 
 module.exports = {gen_Create_Table: gen_Create_Table};
+
+
+//attendance average
+/*
+	SELECT uin, 
+*/
+
+
+
+
+/*
+
+https://www.w3schools.com/nodejs/nodejs_mysql_select.asp
+
+var mysql = require('mysql');
+
+var con = mysql.createConnection({
+  host: "localhost",
+  user: "yourusername",
+  password: "yourpassword",
+  database: "mydb"
+});
+
+con.connect(function(err) {
+  if (err) throw err;
+  con.query("SELECT * FROM customers", function (err, result, fields) {
+    if (err) throw err;
+    console.log(result);
+  });
+});
+
+
+*/
