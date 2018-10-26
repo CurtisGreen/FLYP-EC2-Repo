@@ -18,6 +18,8 @@
   "homepage": "https://github.com/Green000/FLYP-EC2-Repo#readme",
   "dependencies": {
     "express": "^4.16.4",
-    "mysql": "^2.16.0"
+    "mysql": "^2.16.0",
+    "react": "^16.6.0",
+    "react-dom": "^16.6.0"
   }
 }
