@@ -13,13 +13,13 @@ function gen_Create_Table(class_name) {
 	
 	/*
 	CREATE TABLE IF NOT EXISTS &&class_name&& {
-		stu_UIN INT(9) FOREIGN KEY REFERENCES Students(stu_UIN),
-		
+		uin CHAR(9),
+		FOREIGN KEY (uin) REFERENCES Capstone.students(uin)
 	}
 	*/
 	
 	
-	create_tbl_command = "CREATE TABLE IF NOT EXISTS " + class_name + " { stu_UIN INT(9) FOREIGN KEY REFERENCES Students(stu_UIN) }";
+	create_tbl_command = "CREATE TABLE IF NOT EXISTS " + class_name + " { uin CHAR(9), FOREIGN KEY (uin) REFERENCES Capstone.students(uin) }";
 	
 	
 }
@@ -81,6 +81,14 @@ function add_professor(professor_uin_in,professor_first_in,professor_last_in,pro
 							professor_card_in + "');";
 	
 }
+
+
+
+//attendance average
+/*
+	SELECT uin, 
+*/
+
 
 
 
