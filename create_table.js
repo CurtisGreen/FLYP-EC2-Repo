@@ -19,7 +19,7 @@ function gen_Create_Table(class_name) {
 	*/
 	
 	
-	create_tbl_command = "CREATE TABLE IF NOT EXISTS " + class_name + " { uin CHAR(9), FOREIGN KEY (uin) REFERENCES Capstone.students(uin) }";
+	create_tbl_command = "CREATE TABLE IF NOT EXISTS " + class_name + " ( uin CHAR(9), FOREIGN KEY (uin) REFERENCES Capstone.students(uin) );";
 	
 	
 }
@@ -38,9 +38,9 @@ function add_date_column(date_input, table_name, add_date_col_command) {
 	
 	/*
 		ALTER TABLE &&table_name&&
-		ADD &&date_input&& BOOLEAN SET DEFAULT FALSE;
+		ADD &&date_input&& BOOLEAN DEFAULT FALSE;
 	*/
-	add_date_col_command = "ALTER TABLE " + table_name + " ADD " + date_input + " BOOLEAN SET DEFAULT FALSE;";
+	add_date_col_command = "ALTER TABLE " + table_name + " ADD " + date_input + " BOOLEAN DEFAULT FALSE;";
 	
 }
 
