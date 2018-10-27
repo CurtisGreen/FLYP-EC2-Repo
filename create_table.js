@@ -1,11 +1,8 @@
 
-
-
-
 //Class name in format of XXXX-###-### 
 //UINs
-let gen_Create_Table = (class_name) => {
-	return new Promise((resolve, reject) =>{
+let gen_create_table = (class_name) => {
+	return new Promise ((resolve, reject) =>{
 
 		resolve("CREATE TABLE IF NOT EXISTS " + class_name + `
 			( 
@@ -14,8 +11,7 @@ let gen_Create_Table = (class_name) => {
 				classes_attended int(3) DEFAULT 0,
 				FOREIGN KEY (uin) REFERENCES Capstone.students(uin) 
 			);
-		 `
-		 );
+		 `);
 	
 	});
 	
@@ -29,71 +25,59 @@ let gen_Create_Table = (class_name) => {
 	*/	
 }
 
-
-//command to add a new column to a table
-//date_input is the current date/name of the new column
-//table_name is the table name/class name that needs to be modified
-//date_input in form of YYYYMMDD
-//table_name in format of XXXX-###-###
-//add_date_col_command is the resulting SQL command
-function add_date_column(date_input, table_name, add_date_col_command) {
-	
+// Add a new column to a table
+// date_input is the current date/name of the new column: YYYY_MM_DD
+// table_name is the table name/class name XXXX-###-###
+let add_date_column = (date, table_name) => {
+	return new Promise ((resolve, reject) => {
+		resolve("ALTER TABLE " + table_name + " ADD " + date + " BOOLEAN DEFAULT FALSE;");
+	});
 	/*
 		ALTER TABLE &&table_name&&
 		ADD &&date_input&& BOOLEAN DEFAULT FALSE;
 	*/
-	add_date_col_command = "ALTER TABLE " + table_name + " ADD " + date_input + " BOOLEAN DEFAULT FALSE;";
-	
 }
 
+// Add new student
+let add_student = (uin, first_name, last_name, card) => {
+	return new Promise ((resolve, reject) => {
+		resolve("INSERT INTO Capstone.students(uin,firstName,lastName,cardNum) VALUES ('" + 
+						uin + "','" +
+						first_name + "','" +
+						last_name + "','" +
+						card + "');"
+					);
 
-//new command
-
-var add_student_command;
-function add_student(student_uin_in,student_first_in,student_last_in,student_card_in) {
-	
+	});
 	/*
 		INSERT INTO Capstone.students(uin,firstName,lastName,cardNum)
-		VALUES ('uin_in','firstName_in','lastName_in','cardNum_in');
-	*/
-	
-	add_student_command = "INSERT INTO Capstone.students(uin,firstName,lastName,cardNum) VALUES ('" + 
-							student_uin_in + "','" +
-							student_first_in + "','" +
-							student_last_in + "','" +
-							student_card_in + "');";
-	
+		VALUES ('uin','firstName','lastName','cardNum');
+	*/	
 }
 
+// Add new professor
+let add_professor = (uin, first_name, last_name, card) => {
+	return new Promise ((resolve, reject) => {
+		resolve("INSERT INTO Capstone.professors(uin,firstName,lastName,cardNum) VALUES ('" + 
+						uin + "','" +
+						first_name + "','" +
+						last_name + "','" +
+						card + "');"
+					);
 
-
-
-var add_professor_command;
-function add_professor(professor_uin_in,professor_first_in,professor_last_in,professor_card_in) {
-	
+	});
 	/*
 		INSERT INTO Capstone.professors(uin,firstName,lastName,cardNum)
-		VALUES ('uin_in','firstName_in','lastName_in','cardNum_in');
+		VALUES ('uin','firstName','lastName','cardNum');
 	*/
-	
-	add_professor_command = "INSERT INTO Capstone.professors(uin,firstName,lastName,cardNum) VALUES ('" + 
-							professor_uin_in + "','" +
-							professor_first_in + "','" +
-							professor_last_in + "','" +
-							professor_card_in + "');";
-							
-	return add_professor_command;
 }
 
-module.exports = {gen_Create_Table: gen_Create_Table};
-
+module.exports = {gen_create_table, add_date_column, add_student, add_professor};
 
 //attendance average
 /*
 	SELECT uin, 
 */
-
-
 
 
 /*
