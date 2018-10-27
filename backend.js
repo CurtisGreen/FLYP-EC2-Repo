@@ -16,29 +16,17 @@ connection.connect( function(err){
 	if (err) throw err;
 	console.log("Connected to DB");
 
-	//let newQuery = sqlFuncs.gen_Create_Table("testClass");
-	connection.query("CREATE TABLE IF NOT EXISTS testClass ( uin char(9),  FOREIGN KEY (uin) REFERENCES Capstone.students(uin) );", function(error, results, fields){
-		if (error) throw error;
-		console.log("guess it worked");
-	})
+	createAttendanceTable("test");
+	
 });
 
-app.get('/posts', function (req, res) {
-	console.log("it recognizes posts");
-    connection.connect( function(err){
-    	if (err) throw err;
-    	console.log("Connected to DB");
-    });
+function createAttendanceTable(tableName){
 
-    connection.query('SELECT * FROM posts LIMIT 0, 10', function (error, results, fields) {
-      if (error) throw error;
-      console.log("guess it worked");
-      res.send(results)
-    });
+	sqlFuncs.gen_Create_Table(tableName).then(query => {
+		connection.query(query, function(error, results, fields){
+			if (error) throw error;
+			console.log("Attendance table " + tableName + "created");
+		});
+	});
 
-    connection.end();
-});
-// Start the server
-app.listen(3000, () => {
- console.log('Go to http://localhost:3000/posts to see posts');
-});
+}

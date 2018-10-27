@@ -2,26 +2,31 @@
 
 
 
-
-
-
-var create_tbl_command;
-var class_name;
 //Class name in format of XXXX-###-### 
 //UINs
-function gen_Create_Table(class_name) {
+let gen_Create_Table = (class_name) => {
+	return new Promise((resolve, reject) =>{
+
+		resolve("CREATE TABLE IF NOT EXISTS " + class_name + `
+			( 
+				uin CHAR(9),
+				total_classes int(3) DEFAULT 0,
+				classes_attended int(3) DEFAULT 0,
+				FOREIGN KEY (uin) REFERENCES Capstone.students(uin) 
+			);
+		 `
+		 );
+	
+	});
 	
 	/*
 	CREATE TABLE IF NOT EXISTS &&class_name&& {
 		uin CHAR(9),
+		total_classes int(3) DEFAULT 0,
+		classes_attended int(3) DEFAULT 0,
 		FOREIGN KEY (uin) REFERENCES Capstone.students(uin)
 	}
-	*/
-	
-	
-	create_tbl_command = "CREATE TABLE IF NOT EXISTS " + class_name + " ( uin CHAR(9), FOREIGN KEY (uin) REFERENCES Capstone.students(uin) );";
-	
-	
+	*/	
 }
 
 
@@ -31,9 +36,6 @@ function gen_Create_Table(class_name) {
 //date_input in form of YYYYMMDD
 //table_name in format of XXXX-###-###
 //add_date_col_command is the resulting SQL command
-var date_input;
-var table_name;
-var add_date_col_command;
 function add_date_column(date_input, table_name, add_date_col_command) {
 	
 	/*
