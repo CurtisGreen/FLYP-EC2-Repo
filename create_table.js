@@ -1,8 +1,17 @@
+/* TODO:
+
+Queries for: 
+1) adding existing professor to the professor to class table
+2) adding existing students to the attendence tables
+3) setting a student's attendance and setting the num days attended
+4) setting num class days when a new date column is added
+
+*/
 
 //Class name in format of XXXX-###-### 
 //UINs
 let gen_create_table = (class_name) => {
-	return new Promise ((resolve, reject) =>{
+	return new Promise ((resolve, reject) => {
 
 		resolve("CREATE TABLE IF NOT EXISTS " + class_name + `
 			( 
@@ -79,27 +88,3 @@ module.exports = {gen_create_table, add_date_column, add_student, add_professor}
 	SELECT uin, 
 */
 
-
-/*
-
-https://www.w3schools.com/nodejs/nodejs_mysql_select.asp
-
-var mysql = require('mysql');
-
-var con = mysql.createConnection({
-  host: "localhost",
-  user: "yourusername",
-  password: "yourpassword",
-  database: "mydb"
-});
-
-con.connect(function(err) {
-  if (err) throw err;
-  con.query("SELECT * FROM customers", function (err, result, fields) {
-    if (err) throw err;
-    console.log(result);
-  });
-});
-
-
-*/
