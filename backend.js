@@ -1,16 +1,15 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mysql      = require('mysql');
+
 const sql_funcs   = require ('./create_table.js');
 
+// Connect to DB
 const connection = mysql.createConnection({
 	host     : 'localhost',
 	user	 : 'root',
 	database : 'Capstone'
 });
-
-// Initialize the app
-const app = express();
 
 connection.connect( function(err){
 	if (err) throw err;
@@ -24,6 +23,52 @@ connection.connect( function(err){
 
 });
 
+// Initialize the app/router
+const app = express();
+app.use(bodyParser.urlencoded({ extended: true}));
+app.use(bodyParser.json());
+let port = 8080;
+let router = express.Router();
+
+// General API
+router.get('/', function(req, res) {
+	res.json({message: "API works"});
+});
+
+// Add new class
+router.route('/class')
+	.post(function(req, res) {
+		create_attendance_table(req.body.name);
+		res.json({message: 'Success'});
+	});
+
+// Add new attendance day to class
+router.route('/class/:class_id')
+	.put(function(req, res) {
+		add_date_column(req.body.date, req.params.class_id);
+		res.json({message: 'Success'});
+	});
+
+// Add new student
+router.route('/student')
+	.post(function(req, res) {
+		add_student(req.body.uin, req.body.first, req.body.last, req.body.card);
+		res.json({message: 'Success'});
+	});
+
+// Add new professor
+router.route('/professor')
+	.post(function(req, res) {
+		add_professor(req.body.uin, req.body.first, req.body.last, req.body.card);
+		res.json({message: 'Success'});
+	});
+
+// Start server
+app.use('/api', router);
+app.listen(port);
+console.log('Running on ' + port);
+
+// SQL functions
 function create_attendance_table(tableName){
 
 	sql_funcs.gen_create_table(tableName).then(query => {
