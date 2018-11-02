@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS Capstone.students (
 CREATE TABLE IF NOT EXISTS Capstone.courses (
 	course_id CHAR(12),
 	uin CHAR(9),
+    num_held INT,
     PRIMARY KEY (course_id),
     FOREIGN KEY (uin) REFERENCES Capstone.professors(uin)
 );
