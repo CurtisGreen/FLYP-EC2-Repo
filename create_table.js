@@ -1,7 +1,14 @@
 /* TODO:
 
 Queries for: 
-1) adding existing professor to the professor to class table
+1) Add new class to courses table
+
+INSERT INTO Capstone.courses(course_id, uin, num_held) VALUES ('" + 
+						course_id + "','" +
+						uin + "'," +
+						0 + ");"
+					);
+
 2) adding existing students to the attendence tables
 3) setting a student's attendance and setting the num days attended
 4) setting num class days when a new date column is added
