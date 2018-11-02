@@ -69,28 +69,8 @@ app.listen(port);
 console.log('Running on ' + port);
 
 // SQL functions
-function create_attendance_table(tableName){
 
-	sql_funcs.gen_create_table(tableName).then(query => {
-		connection.query(query, function(error, results, fields){
-			if (error) throw error;
-			console.log("Attendance table " + tableName + " created");
-		});
-	});
-
-}
-
-function add_date_column(date, table_name){
-
-	sql_funcs.add_date_column(date, table_name).then(query => {
-		connection.query(query, function(error, results, fields){
-			if (error) throw error;
-			console.log("Date column " + date + " added for " + table_name);
-		});
-	});
-
-}
-
+// Add new student
 function add_student(uin, first_name, last_name, card){
 
 	sql_funcs.add_student(uin, first_name, last_name, card).then(query => {
@@ -102,12 +82,61 @@ function add_student(uin, first_name, last_name, card){
 
 }
 
+// Add new professor
 function add_professor(uin, first_name, last_name, card){
 
 	sql_funcs.add_professor(uin, first_name, last_name, card).then(query => {
 		connection.query(query, function(error, results, fields){
 			if (error) throw error;
 			console.log("Student " + uin + " added");
+		});
+	});
+
+}
+
+// Assign professor to course
+function insert_course(course_id, professor_uin){
+
+	sql_funcs.insert_course(course_id, professor_uin).then(query => {
+		connection.query(query, function(error, results, fields){
+			if (error) throw error;
+			console.log("Course " + course_id + " assigned to" + professor_uin);
+		});
+	});
+
+}
+
+// Creates attendance roster for a class
+function create_attendance_table(class_name){
+
+	sql_funcs.create_attendance_table(class_name).then(query => {
+		connection.query(query, function(error, results, fields){
+			if (error) throw error;
+			console.log("Attendance table " + tableName + " created");
+		});
+	});
+
+}
+
+// Add student to course roster
+function populate_course(course_id, student_uin){
+
+	sql_funcs.populate_course(course_id, student_uin).then(query => {
+		connection.query(query, function(error, results, fields){
+			if (error) throw error;
+			console.log("Student " + student_uin + " added to " + course_id);
+		});
+	});
+
+}
+
+// Add new attendance day column to the table
+function add_date_column(date, table_name){
+
+	sql_funcs.add_date_column(date, table_name).then(query => {
+		connection.query(query, function(error, results, fields){
+			if (error) throw error;
+			console.log("Date column " + date + " added for " + table_name);
 		});
 	});
 
