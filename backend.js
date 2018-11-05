@@ -5,21 +5,32 @@ const mysql      = require('mysql');
 const sql_funcs   = require ('./create_table.js');
 
 // Connect to DB
-const connection = mysql.createConnection({
+const sql_conn = mysql.createConnection({
 	host     : 'localhost',
 	user	 : 'root',
 	database : 'Capstone'
 });
 
-connection.connect( function(err){
+sql_conn.connect( function(err){
 	if (err) throw err;
 	console.log("Connected to DB");
 
-	// All of these worked:
-	//create_attendance_table("test");
-	//add_date_column("2018_10_27", "test");
-	//add_student("333003333", "Curtis", "Green", "123456789");
-	//add_professor("444004444", "Curtis", "Green", "123456789");
+	// Test params
+	let stud_uin = 888008888;
+	let prof_uin = 999009999;
+	let course_name = "CSCE_121_500";
+	let date = "2018_11_05";
+
+	add_student(stud_uin, "stud_first", "stud_last", "123");
+	setTimeout( add_professor.bind(null, prof_uin, "prof_first", "prof_last", "123"), 100);
+	setTimeout( insert_course.bind(null, course_name, prof_uin), 200);
+	setTimeout( create_attendance_table.bind(null, course_name), 300);
+	setTimeout( populate_course.bind(null, course_name, stud_uin), 400);
+	setTimeout( add_date_column.bind(null, date, course_name), 500);
+	setTimeout( update_attendance.bind(null, stud_uin, course_name, date), 600);
+	setTimeout( inc_days_attended.bind(null, stud_uin, course_name), 700);
+	setTimeout( inc_course_days.bind(null, course_name), 800);
+	setTimeout( get_num_attended.bind(null, stud_uin, course_name), 900);
 
 });
 
@@ -74,9 +85,10 @@ console.log('Running on ' + port);
 function add_student(uin, first_name, last_name, card){
 
 	sql_funcs.add_student(uin, first_name, last_name, card).then(query => {
-		connection.query(query, function(error, results, fields){
+		sql_conn.query(query, function(error, results, fields){
 			if (error) throw error;
-			console.log("Student " + uin + " added");
+			console.log("\nStudent " + uin + " added");
+			//console.log(results);
 		});
 	});
 
@@ -86,9 +98,10 @@ function add_student(uin, first_name, last_name, card){
 function add_professor(uin, first_name, last_name, card){
 
 	sql_funcs.add_professor(uin, first_name, last_name, card).then(query => {
-		connection.query(query, function(error, results, fields){
+		sql_conn.query(query, function(error, results, fields){
 			if (error) throw error;
-			console.log("Student " + uin + " added");
+			console.log("\nProfessor " + uin + " added");
+			//console.log(results);
 		});
 	});
 
@@ -98,9 +111,10 @@ function add_professor(uin, first_name, last_name, card){
 function insert_course(course_id, professor_uin){
 
 	sql_funcs.insert_course(course_id, professor_uin).then(query => {
-		connection.query(query, function(error, results, fields){
+		sql_conn.query(query, function(error, results, fields){
 			if (error) throw error;
-			console.log("Course " + course_id + " assigned to" + professor_uin);
+			console.log("\nCourse " + course_id + " assigned to " + professor_uin);
+			//console.log(results);
 		});
 	});
 
@@ -110,9 +124,10 @@ function insert_course(course_id, professor_uin){
 function create_attendance_table(class_name){
 
 	sql_funcs.create_attendance_table(class_name).then(query => {
-		connection.query(query, function(error, results, fields){
+		sql_conn.query(query, function(error, results, fields){
 			if (error) throw error;
-			console.log("Attendance table " + tableName + " created");
+			console.log("\nAttendance table " + class_name + " created");
+			//console.log(results);
 		});
 	});
 
@@ -122,9 +137,10 @@ function create_attendance_table(class_name){
 function populate_course(course_id, student_uin){
 
 	sql_funcs.populate_course(course_id, student_uin).then(query => {
-		connection.query(query, function(error, results, fields){
+		sql_conn.query(query, function(error, results, fields){
 			if (error) throw error;
 			console.log("Student " + student_uin + " added to " + course_id);
+			//console.log(results);
 		});
 	});
 
@@ -134,10 +150,62 @@ function populate_course(course_id, student_uin){
 function add_date_column(date, table_name){
 
 	sql_funcs.add_date_column(date, table_name).then(query => {
-		connection.query(query, function(error, results, fields){
+		sql_conn.query(query, function(error, results, fields){
 			if (error) throw error;
-			console.log("Date column " + date + " added for " + table_name);
+			console.log("\nDate column " + date + " added for " + table_name);
+			//console.log(results);
 		});
 	});
 
+}
+
+// Set a student as present
+function update_attendance(uin, course_name, date){
+
+	sql_funcs.update_attendance(uin, course_name, date).then(query => {
+		sql_conn.query(query, function (error, results, fields){
+			if (error) throw error;
+			console.log("\nStudent " + uin + " has attended " + course_name + " on " + date);
+			//console.log(results);
+		});
+	});
+
+}
+
+// Add 1 to days attended
+function inc_days_attended(uin, course_name){
+
+	sql_funcs.inc_days_attended(uin, course_name).then(query => {
+		sql_conn.query(query, function (error, results, fields){
+			if (error) throw error;
+			console.log("\nStudent " + uin + " attendance for " + course_name + " increased");
+			//console.log(results);
+		});
+	});
+	
+}
+
+// Add 1 to number of course days
+function inc_course_days(course_name){
+
+	sql_funcs.inc_course_days(course_name).then(query => {
+		sql_conn.query(query, function (error, results, fields){
+			if (error) throw error;
+			console.log("\nCourse " + course_name + " days increased");
+			//console.log(results);
+		});
+	});
+	
+}
+// Get number of classes attended
+function get_num_attended(uin, course_name){
+
+	sql_funcs.get_num_attended(uin, course_name).then(query => {
+		sql_conn.query(query, function (error, results, fields){
+			if (error) throw error;
+			console.log("\nStudent " + uin + " num days retrieved for course " + course_name);
+			console.log("Number of days: " + results[0].classes_attended);
+		});
+	});
+	
 }
