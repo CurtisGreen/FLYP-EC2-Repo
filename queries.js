@@ -117,9 +117,19 @@ let get_num_attended = (uin, course_name) => {
 	});
 }
 
+// Get number of classes that have been heldd
+let get_num_class_days = (course_name) => {
+	return new Promise ((resolve, reject) => {
+		resolve(`SELECT num_held 
+					FROM Capstone.courses
+					WHERE course_id = '` + course_name + "';"
+				);
+	});
+}
+
 // Export to be used in other file
 module.exports = {
 	add_student, add_professor, insert_course, create_attendance_table,
 	populate_course, add_date_column, update_attendance, inc_days_attended,
-	inc_course_days, get_num_attended
+	inc_course_days, get_num_attended, get_num_class_days
 };
