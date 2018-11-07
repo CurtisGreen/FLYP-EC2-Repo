@@ -1,17 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-
 const api_funcs = require('./apiFuncs');
-
-let uin = 888008888;
-let course_name = "CSCE_121_500";
-
 
 // Initialize the app/router
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true}));
 app.use(bodyParser.json());
-let port = 8080;
+let port = 3001;
 let router = express.Router();
 
 // General API
@@ -22,7 +17,8 @@ router.get('/', function(req, res) {
 // Add new class
 router.route('/class')
 	.post(function(req, res) {
-		api_funcs.create_attendance_table(req.body.name);
+		api_funcs.create_attendance_table(req.body.course_name);
+		api_funcs.insert_course(req.body.course_name, req.body.uin);
 		res.json({message: 'Success'});
 	});
 
@@ -36,8 +32,15 @@ router.route('/class/:class_id')
 
 // Add new student
 router.route('/student')
+	// Students table
 	.post(function(req, res) {
 		api_funcs.add_student(req.body.uin, req.body.first, req.body.last, req.body.card);
+		res.json({message: 'Success'});
+	})
+
+	// Add student to class
+	.put(function(req, res) {
+		api_funcs.populate_course(req.body.course_name, req.body.uin);
 		res.json({message: 'Success'});
 	});
 
@@ -49,6 +52,7 @@ router.route('/professor')
 	});
 
 // Set a student's attendance and return num attended
+// TODO: check if it returns the right number of days attended or if we need to return +=1
 router.route('/attendance')
 	.put(function(req,res) {
 		api_funcs.update_attendance(req.body.uin, req.body.course_name, req.body.date);

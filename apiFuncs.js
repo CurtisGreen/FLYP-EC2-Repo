@@ -15,24 +15,25 @@ sql_conn.connect( function(err){
 	if (err) throw err;
 	console.log("Connected to DB");
 
+	/*
 	// Test params
 	let stud_uin = 888008888;
 	let prof_uin = 999009999;
 	let course_name = "CSCE_121_500";
 	let date = "2018_11_05";
 
-	/*
-		add_student(stud_uin, "stud_first", "stud_last", "123");
-		setTimeout( add_professor.bind(null, prof_uin, "prof_first", "prof_last", "123"), 100);
+	// Tests for functions
+	add_student(stud_uin, "stud_first", "stud_last", "123");
+	setTimeout( add_professor.bind(null, prof_uin, "prof_first", "prof_last", "123"), 100);
 	setTimeout( insert_course.bind(null, course_name, prof_uin), 200);
-		setTimeout( create_attendance_table.bind(null, course_name), 300);
+	setTimeout( create_attendance_table.bind(null, course_name), 300);
 	setTimeout( populate_course.bind(null, course_name, stud_uin), 400);
-		setTimeout( add_date_column.bind(null, date, course_name), 500);
-		setTimeout( update_attendance.bind(null, stud_uin, course_name, date), 600);
-		setTimeout( inc_days_attended.bind(null, stud_uin, course_name), 700);
-		setTimeout( inc_course_days.bind(null, course_name), 800);
-		setTimeout( get_num_attended.bind(null, stud_uin, course_name), 900);
-		setTimeout( get_num_class_days.bind(null, course_name), 1000);
+	setTimeout( add_date_column.bind(null, date, course_name), 500);
+	setTimeout( update_attendance.bind(null, stud_uin, course_name, date), 600);
+	setTimeout( inc_days_attended.bind(null, stud_uin, course_name), 700);
+	setTimeout( inc_course_days.bind(null, course_name), 800);
+	setTimeout( get_num_attended.bind(null, stud_uin, course_name), 900);
+	setTimeout( get_num_class_days.bind(null, course_name), 1000);
 	*/
 
 });
