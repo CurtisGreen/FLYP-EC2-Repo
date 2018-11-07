@@ -1,9 +1,14 @@
 # FLYP-EC2-Repo
 Database for FLYP capstone project
 
-Connection setup:
+* API on `localhost:3001/api/`
 
-Use the .pem key
-![Connection setup](SQL_Connection_Setup.PNG)
-
-Note: There is a known bug with MySQL workbench and the database where you need to first save your connection under manage connections -> new. Then you can open it up with the grey button on the home screen.
+#### API functions
+| Path | Type | Input | Output |
+|---   | ---  |---    | ---    |
+|  `/class/` | POST | course_name, uin | message |
+|  `/class/:class_id/` | PUT | date | message |
+|  `/student/` | POST | uin, first, last, card | message |
+|  `/student/` | PUT | course_name, uin | message |
+|  `/professor/` | POST | uin, first, last, card | message |
+|  `/attendance/` | PUT | uin, course_name, date | num_attended, num_class_days |

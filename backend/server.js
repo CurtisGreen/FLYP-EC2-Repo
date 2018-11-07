@@ -23,10 +23,10 @@ router.route('/class')
 	});
 
 // Add new attendance day to class
-router.route('/class/:class_id')
+router.route('/class/:course_name')
 	.put(function(req, res) {
-		api_funcs.add_date_column(req.body.date, req.params.class_id);
-		api_funcs.inc_course_days(req.params.class_id);
+		api_funcs.add_date_column(req.body.date, req.params.course_name);
+		api_funcs.inc_course_days(req.params.course_name);
 		res.json({message: 'Success'});
 	});
 
@@ -59,7 +59,7 @@ router.route('/attendance')
 		api_funcs.inc_days_attended(req.body.uin, req.body.course_name);
 		api_funcs.get_num_attended(req.body.uin, req.body.course_name).then(num_att => {
 			api_funcs.get_num_class_days(req.body.course_name).then(num_days => {
-				res.json({num_attended: num_att, get_class_days: num_days});
+				res.json({num_attended: num_att, num_class_days: num_days});
 			});
 		});
 	});
