@@ -10,9 +10,19 @@ let port = 3001;
 let router = express.Router();
 
 // General API
-router.get('/', function(req, res) {
-	res.json({message: "API works"});
-});
+router.route('/')
+	.get(function(req, res) {
+		console.log(req.body);
+		res.json({message: "API works"});
+	})
+	.post(function(req, res) {
+		console.log(req.body);
+		res.json({message: "API works"});
+	})
+	.put(function(req, res) {
+		console.log(req.body);
+		res.json({message: "API works"});
+	});
 
 // Add new class
 router.route('/class')
