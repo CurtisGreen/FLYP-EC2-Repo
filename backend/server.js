@@ -62,7 +62,6 @@ router.route('/professor')
 	});
 
 // Set a student's attendance and return num attended
-// TODO: check if it returns the right number of days attended or if we need to return +=1
 router.route('/attendance')
 	.put(function(req,res) {
 		api_funcs.update_attendance(req.body.uin, req.body.course_name, req.body.date);
