@@ -1,7 +1,24 @@
 # FLYP-EC2-Repo
 Database for FLYP capstone project
 
-* API on `localhost:3001/api/`
+#### Setup:
+```
+npm install
+pm2 start backend/server.js --name "API"
+// If that doesn't work do this first: npm install pm2 -g
+```
+
+#### Control:
+```
+pm2 list // Shows status
+pm2 start API
+pm2 restart API
+pm2 stop API
+```
+
+#### Use:
+
+* API on `localhost:3001/api/` or `http://ec2-18-222-100-183.us-east-2.compute.amazonaws.com:3001/api/`
 
 #### API functions
 | Path | Type | Input | Output | Desc |
