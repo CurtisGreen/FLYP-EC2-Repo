@@ -9,7 +9,7 @@ app.use(bodyParser.json());
 let port = 3001;
 let router = express.Router();
 
-// General API
+// General API for testing
 router.route('/')
 	.get(function(req, res) {
 		console.log(req.body);
@@ -40,9 +40,8 @@ router.route('/class/:course_name')
 		res.json({message: 'Success'});
 	});
 
-// Add new student
 router.route('/student')
-	// Students table
+	// Add new student
 	.post(function(req, res) {
 		api_funcs.add_student(req.body.uin, req.body.first, req.body.last, req.body.card);
 		res.json({message: 'Success'});
@@ -61,9 +60,9 @@ router.route('/professor')
 		res.json({message: 'Success'});
 	});
 
-// Set a student's attendance and return num attended
 router.route('/attendance')
-	.put(function(req,res) {
+	// Set a student's attendance and return num attended
+	.put(function(req, res) {
 		api_funcs.update_attendance(req.body.uin, req.body.course_name, req.body.date);
 		api_funcs.inc_days_attended(req.body.uin, req.body.course_name);
 		api_funcs.get_num_attended(req.body.uin, req.body.course_name).then(num_att => {
@@ -71,7 +70,14 @@ router.route('/attendance')
 				res.json({num_attended: num_att, num_class_days: num_days});
 			});
 		});
-	});
+	})
+
+	// Return attendance table
+	.get(function(req, res) {
+		api_funcs.get_attendance(req.body.course_name).then(data => {
+			res.json({data: data});
+		})
+	})
 
 
 // Start server

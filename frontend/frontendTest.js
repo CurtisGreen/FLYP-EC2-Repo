@@ -17,7 +17,8 @@ function callApi(url = '', data = {}, type = '') {
   3) addClass("CSCE_121_500", "222002222");
   4) addStudentToClass("CSCE_121_500", "111001111");
   5) addAttendanceDay("CSCE_121_500", "2018_11_14");
-  6) trackAttendance("111001111", "CSCE_121_500", "2018_11_14");
+  6) let data = trackAttendance("111001111", "CSCE_121_500", "2018_11_14");
+    data.num_attended, data.num_class_days
 
 */
 

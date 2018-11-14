@@ -36,6 +36,8 @@ sql_conn.connect( function(err){
 	setTimeout( get_num_class_days.bind(null, course_name), 1000);
 	*/
 
+	//get_attendance(course_name);
+
 });
 
 // Add new student
@@ -215,7 +217,7 @@ let get_num_attended = (uin, course_name) =>{
 }
 
 // Get number of class days held
-let  get_num_class_days = (course_name) => {
+let get_num_class_days = (course_name) => {
 	return new Promise ((resolve, reject) => {
 		sql_queries.get_num_class_days(course_name).then(query => {
 			sql_conn.query(query, function (error, results, fields){
@@ -234,8 +236,25 @@ let  get_num_class_days = (course_name) => {
 	
 }
 
+let get_attendance = (course_name) => {
+	return new Promise((resolve, reject) => {
+		sql_queries.get_attendance(course_name).then(query => {
+			sql_conn.query(query, function (error, results, fields){
+				if (error) {
+					console.error(error);
+					resolve(-1);
+				}
+				else {
+					console.log("\nCourse results for " + course_name + " returned");
+					resolve(results);
+				}
+			})
+		})
+	})
+}
+
 module.exports = {
 	add_student, add_professor, insert_course, create_attendance_table,
 	populate_course, add_date_column, update_attendance, inc_days_attended,
-	inc_course_days, get_num_attended, get_num_class_days
+	inc_course_days, get_num_attended, get_num_class_days, get_attendance
 };
