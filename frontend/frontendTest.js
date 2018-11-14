@@ -19,6 +19,9 @@ function callApi(url = '', data = {}, type = '') {
   5) addAttendanceDay("CSCE_121_500", "2018_11_14");
   6) let data = trackAttendance("111001111", "CSCE_121_500", "2018_11_14");
     data.num_attended, data.num_class_days
+  7) let data = getAttendance("CSCE_121_500");
+    data[0].uin, data[0].classes_attended, data[0].'2018_11_05'
+    data[1].uin, etc.
 
 */
 
@@ -63,13 +66,24 @@ function addProfessor(uin, firstName, lastName, cardNum) {
 
 let trackAttendance = (studUin, courseName, date) => {
   return new Promise ((resolve, reject) => {
-    callApi('localhost:3001/api/student', {uin: studUin, course_name: courseName, date: date}, "PUT")
+    callApi('localhost:3001/api/attendance', {uin: studUin, course_name: courseName, date: date}, "PUT")
       .then(data => {
         console.log(JSON.stringify(data));
         resolve(JSON.stringify(data));
       })
       .catch(error => console.error(error));
   });
+}
+
+let getAttendance = (courseName) => {
+  return new Promise ((resolve, reject) => {
+    callApi('localhost:3001/api/attendance', {course_name: courseName}, "GET")
+      .then(data => {
+        console.log(JSON.stringify(data));
+        resolve(JSON.stringify(data));
+      })
+      .catch(error => console.error(error));
+  })
 }
 
 class Posts extends Component {
