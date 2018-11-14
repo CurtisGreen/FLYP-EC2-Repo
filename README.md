@@ -12,3 +12,4 @@ Database for FLYP capstone project
 |  `/student/` | PUT | course_name, uin | message | Insert student into course |
 |  `/professor/` | POST | uin, first, last, card | message | Add new professor |
 |  `/attendance/` | PUT | uin, course_name, date | num_attended, num_class_days | Set a student as attended and return attendance info |
+|  `/attendance/` | GET | course_name | all course table data | Gets all course_name  data |
