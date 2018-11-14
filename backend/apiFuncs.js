@@ -27,7 +27,8 @@ sql_conn.connect( function(err){
 	//setTimeout( add_professor.bind(null, prof_uin, "prof_first", "prof_last", "123"), 100);
 	//setTimeout( insert_course.bind(null, course_name, prof_uin), 200);
 	//setTimeout( create_attendance_table.bind(null, course_name), 300);
-	/*setTimeout( populate_course.bind(null, course_name, stud_uin), 400);
+	//setTimeout( populate_course.bind(null, course_name, stud_uin), 400);
+	/*
 	setTimeout( add_date_column.bind(null, date, course_name), 500);
 	setTimeout( update_attendance.bind(null, stud_uin, course_name, date), 600);
 	setTimeout( inc_days_attended.bind(null, stud_uin, course_name), 700);
@@ -36,7 +37,7 @@ sql_conn.connect( function(err){
 	setTimeout( get_num_class_days.bind(null, course_name), 1000);
 	*/
 
-	//get_attendance(course_name);
+	get_attendance(course_name);
 
 });
 
@@ -236,6 +237,7 @@ let get_num_class_days = (course_name) => {
 	
 }
 
+// Returns attendance table in csv
 let get_attendance = (course_name) => {
 	return new Promise((resolve, reject) => {
 		sql_queries.get_attendance(course_name).then(query => {
@@ -246,11 +248,40 @@ let get_attendance = (course_name) => {
 				}
 				else {
 					console.log("\nCourse results for " + course_name + " returned");
-					resolve(results);
+					parse_attendance_table(results).then(csvOutput => {
+						resolve(csvOutput);
+					});
 				}
-			})
-		})
-	})
+			});
+		});
+	});
+}
+
+// Parses array of json to csv string
+let parse_attendance_table = (results) => {
+	return new Promise ((resolve, reject) => {
+		
+		// Get columns
+		let columns = [];
+		let csvOutput = "";
+		for (let key in JSON.parse(JSON.stringify(results[0]))) {
+			columns.push(key);
+			csvOutput += key;
+			csvOutput += ',';
+		}
+		csvOutput += '\n';
+
+		// Populate table
+		for (let row in results) {
+			for (let index in columns){
+				csvOutput += results[row][columns[index]];
+				csvOutput += ',';
+			}
+			csvOutput += '\n';
+		}
+		
+		resolve(csvOutput);
+	});
 }
 
 module.exports = {
