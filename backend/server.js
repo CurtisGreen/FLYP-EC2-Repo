@@ -6,6 +6,11 @@ const api_funcs = require('./apiFuncs');
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true}));
 app.use(bodyParser.json());
+app.use(function(req, res, next) {
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+	next();
+})
 let port = 3001;
 let router = express.Router();
 
@@ -43,7 +48,7 @@ router.route('/class/:course_name')
 router.route('/student')
 	// Add new student
 	.post(function(req, res) {
-		api_funcs.add_student(req.body.uin, req.body.first, req.body.last, req.body.card);
+		api_funcs.add_student(req.body.uin, req.body.first, req.body.last);
 		res.json({message: 'Success'});
 	})
 
@@ -56,12 +61,12 @@ router.route('/student')
 // Add new professor
 router.route('/professor')
 	.post(function(req, res) {
-		api_funcs.add_professor(req.body.uin, req.body.first, req.body.last, req.body.card);
+		api_funcs.add_professor(req.body.uin, req.body.first, req.body.last);
 		res.json({message: 'Success'});
 	});
 
+// Set a student's attendance and return num attended
 router.route('/attendance')
-	// Set a student's attendance and return num attended
 	.put(function(req, res) {
 		api_funcs.update_attendance(req.body.uin, req.body.course_name, req.body.date);
 		api_funcs.inc_days_attended(req.body.uin, req.body.course_name);
@@ -72,13 +77,23 @@ router.route('/attendance')
 		});
 	})
 
-	// Return attendance table
+// Return attendance table
+router.route('/attendance/:course_name')
 	.get(function(req, res) {
-		api_funcs.get_attendance(req.body.course_name).then(data => {
+		api_funcs.get_attendance(req.params.course_name).then(data => {
 			res.json({data: data});
 		})
 	})
 
+/* 
+	Login()
+		input: uin
+		output: exists, list of classes
+
+	update prof uin()
+	update stud uin()
+	
+*/
 
 // Start server
 app.use('/api', router);
