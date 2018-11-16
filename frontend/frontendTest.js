@@ -4,14 +4,17 @@ import ReactDOM from 'react-dom';
 // Calls API
 function callApi(url = '', data = {}, type = '') {
 	return fetch(url, {
+    method: type,
 		headers: { "Content-Type": "application/json; charset=utf-8" },
 		body: JSON.stringify(data)
 	})
-	.then(response => response.json());
+	.then(response => response.json())
+  .catch(err => console.error(err));
 }
 
 /* Example workflow:
-
+  0) let data = login(profUin);
+    looks like: data.courses = ["CSCE_121_500", "CSCE_222_500"];
   1) addStudent("111001111", "Curtis", "Green", "card number here");
   2) addProfessor("222002222", "notCurtis", "notGreen", "card number here");
   3) addClass("CSCE_121_500", "222002222");
@@ -20,6 +23,7 @@ function callApi(url = '', data = {}, type = '') {
   6) let data = trackAttendance("111001111", "CSCE_121_500", "2018_11_14");
     data.num_attended, data.num_class_days
   7) let csv = getAttendance("CSCE_121_500");
+    csv is a string in csv format
     download csv
 
 */
@@ -28,7 +32,7 @@ function callApi(url = '', data = {}, type = '') {
 //          Functions for calling API
 ///////////////////////////////////////////////////////
 function testApi() {
-    callApi('localhost:3001/api', {test: "test"}, "GET")
+    callApi('localhost:3001/api', {test: "test"}, "POST")
       .then(data => console.log(data.message))
       .catch(error => console.error(error));
 }
@@ -46,7 +50,7 @@ function addAttendanceDay(courseName, courseDate) {
 }
 
 function addStudent(uin, firstName, lastName, cardNum) {
-    callApi('localhost:3001/api/student', {uin: uin, first: firstName, last: lastName, card: cardNum}, "POST")
+    callApi('localhost:3001/api/student', {uin: uin, first: firstName, last: lastName}, "POST")
       .then(data => console.log(data.message))
       .catch(error => console.error(error));
 }
@@ -58,7 +62,7 @@ function addStudentToClass(courseName, uin) {
 }
 
 function addProfessor(uin, firstName, lastName, cardNum) {
-    callApi('localhost:3001/api/professor', {uin: uin, first: firstName, last: lastName, card: cardNum}, "POST")
+    callApi('localhost:3001/api/professor', {uin: uin, first: firstName, last: lastName}, "POST")
       .then(data => console.log(data.message))
       .catch(error => console.error(error));
 }
@@ -76,7 +80,7 @@ let trackAttendance = (studUin, courseName, date) => {
 
 let getAttendance = (courseName) => {
   return new Promise ((resolve, reject) => {
-    callApi('localhost:3001/api/attendance', {course_name: courseName}, "GET")
+    callApi('localhost:3001/api/attendance' + courseName, "GET")
       .then(data => {
         console.log(JSON.stringify(data));
         resolve(JSON.stringify(data));

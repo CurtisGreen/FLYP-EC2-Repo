@@ -37,14 +37,14 @@ sql_conn.connect( function(err){
 	setTimeout( get_num_class_days.bind(null, course_name), 1000);
 	*/
 
-	get_attendance(course_name);
+	//get_attendance(course_name);
 
 });
 
 // Add new student
-function add_student(uin, first_name, last_name, card){
+function add_student(uin, first_name, last_name){
 
-	sql_queries.add_student(uin, first_name, last_name, card).then(query => {
+	sql_queries.add_student(uin, first_name, last_name).then(query => {
 		sql_conn.query(query, function(error, results, fields){
 			// Success
 			if (!error) {
@@ -66,7 +66,7 @@ function add_student(uin, first_name, last_name, card){
 // Add new professor
 function add_professor(uin, first_name, last_name, card){
 
-	sql_queries.add_professor(uin, first_name, last_name, card).then(query => {
+	sql_queries.add_professor(uin, first_name, last_name).then(query => {
 		sql_conn.query(query, function(error, results, fields){
 			// Success
 			if (!error) {

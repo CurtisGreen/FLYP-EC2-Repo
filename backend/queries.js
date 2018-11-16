@@ -1,12 +1,11 @@
 
 // Add new student
-let add_student = (uin, first_name, last_name, card) => {
+let add_student = (uin, first_name, last_name) => {
 	return new Promise ((resolve, reject) => {
-		resolve("INSERT INTO Capstone.students(uin,firstName,lastName,cardNum) VALUES ('" + 
+		resolve("INSERT INTO Capstone.students(uin,firstName,lastName) VALUES ('" + 
 					uin + "','" +
 					first_name + "','" +
-					last_name + "','" +
-					card + "');"
+					last_name + "');"
 				);
 
 	});
@@ -19,11 +18,10 @@ let add_student = (uin, first_name, last_name, card) => {
 // Add new professor
 let add_professor = (uin, first_name, last_name, card) => {
 	return new Promise ((resolve, reject) => {
-		resolve("INSERT INTO Capstone.professors(uin,firstName,lastName,cardNum) VALUES ('" + 
+		resolve("INSERT INTO Capstone.professors(uin,firstName,lastName) VALUES ('" + 
 					uin + "','" +
 					first_name + "','" +
-					last_name + "','" +
-					card + "');"
+					last_name + "');"
 				);
 
 	});
