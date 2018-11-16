@@ -1,6 +1,55 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router";
+import Dropzone from 'react-dropzone'
 import "./App.css";
+
+
+class DragAndDrop extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      accepted: [],
+      rejected: []
+    }
+  }
+
+  render() {
+    return (
+      <section>
+        <div className="dropzone">
+        <h2>Create Class</h2>
+          <Dropzone
+            accept="image/jpeg, image/png, text/csv"
+            onDrop={(accepted, rejected) => { this.setState({ accepted, rejected }); }}
+          >
+            <p>Drag and drop the class roster (.csv file) from Howdy.</p>
+          </Dropzone>
+        </div>
+        <aside>
+          <h2>Accepted files</h2>
+          <ul>
+            {
+              this.state.accepted.map(f => <li key={f.name}>{f.name} - {f.size} bytes</li>)
+            }
+          </ul>
+          <h2>Rejected files</h2>
+          <ul>
+            {
+              this.state.rejected.map(f => <li key={f.name}>{f.name} - {f.size} bytes</li>)
+            }
+          </ul>
+        </aside>
+      </section>
+    );
+  }
+}
+
+
+
+
+
+
+
 
 class Authbox extends Component {
 
@@ -12,13 +61,6 @@ class Authbox extends Component {
           placeholder = "Username"
           onChange = {this.props.onUNChange}
         />
-        <div>
-          <textarea
-            className = "UINform"
-            placeholder = "Password"
-            onChange = {this.props.onPWChange}
-          />
-        </div>
       </div>
     );
   }
@@ -47,10 +89,15 @@ class App extends Component {
     this.handleUNChange = this.handleUNChange.bind(this);
     this.handlePWChange = this.handlePWChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleCSVSubmit = this.handleCSVSubmit.bind(this);
     this.state = {
       UNval: "un",
       PWval: "pw",
       redirect: false,
+      phase1hidden: false,
+      phase2hidden: true,
+
+      CSVfiles: []
     };
   }
 
@@ -70,7 +117,20 @@ class App extends Component {
     const PWval = this.state.PWval;
     console.log( "Submit button captured: \nUNval: " + UNval + "\nPWval: " + PWval );
     // Hash PWval and send it somewhere
-    this.setState({ redirect: true });
+
+    // Send backend the UIN, get response
+
+    //if(response is good){
+    	this.setState({ phase1hidden: true,
+    					phase2hidden: false });
+	//else
+		//set error message visible
+    //this.setState( prevState => { phase1hidden: !prevState.phase1hidden } );
+  }
+
+  handleCSVSubmit() {
+
+  	//this.setState({CSVfiles: state.accepted });
   }
 
   renderRedirect = () => {
@@ -92,14 +152,29 @@ class App extends Component {
           </div>
         </div>
         <div id = "wrapCenter"> 
-          <div id = "center">
+          <div id = "phase1"
+          	hidden = {this.state.phase1hidden}
+          >
             <Authbox
               onUNChange = {this.handleUNChange}
-              onPWChange = {this.handlePWChange}
             />
             <Submitbutton
               onClick = { () => this.handleSubmit() }
             />
+          </div>
+          <div id = "phase2"
+          	hidden = {this.state.phase2hidden}
+          >
+          	<center>
+          	<br/>
+          	<p> Class list shown here </p>	
+			<br/>
+
+          	<DragAndDrop/>
+          	<Submitbutton
+              onClick = { () => this.handleCSVSubmit() }
+            />
+          	</center>
           </div>
           {this.renderRedirect()}
         </div>
