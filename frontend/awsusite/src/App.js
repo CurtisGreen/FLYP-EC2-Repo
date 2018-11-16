@@ -4,6 +4,21 @@ import Dropzone from 'react-dropzone'
 import "./App.css";
 
 
+class Submitbutton extends Component {
+
+  render() {
+    return(
+        <button
+          className = "Submitbutton"
+          onClick = {this.props.onClick}
+        >
+          Submit
+        </button>
+    );
+  }
+
+}
+
 class DragAndDrop extends React.Component {
   constructor() {
     super()
@@ -14,6 +29,9 @@ class DragAndDrop extends React.Component {
   }
 
   render() {
+
+    const CSVarray = this.state.accepted;
+
     return (
       <section>
         <div className="dropzone">
@@ -38,6 +56,11 @@ class DragAndDrop extends React.Component {
               this.state.rejected.map(f => <li key={f.name}>{f.name} - {f.size} bytes</li>)
             }
           </ul>
+          <Submitbutton
+            onClick = {(CSVarray) => this.props.onClick(CSVarray)}
+          >
+            Submit
+          </Submitbutton>
         </aside>
       </section>
     );
@@ -62,21 +85,6 @@ class Authbox extends Component {
           onChange = {this.props.onUNChange}
         />
       </div>
-    );
-  }
-
-}
-
-class Submitbutton extends Component {
-
-  render() {
-    return(
-        <button
-          className = "Submitbutton"
-          onClick = {this.props.onClick}
-        >
-          Submit
-        </button>
     );
   }
 
@@ -128,8 +136,8 @@ class App extends Component {
     //this.setState( prevState => { phase1hidden: !prevState.phase1hidden } );
   }
 
-  handleCSVSubmit() {
-
+  handleCSVSubmit(CSVarray) {
+    console.log( "CSV Submitted", CSVarray );
   	//this.setState({CSVfiles: state.accepted });
   }
 
@@ -170,13 +178,11 @@ class App extends Component {
           	<p> Class list shown here </p>	
 			<br/>
 
-          	<DragAndDrop/>
-          	<Submitbutton
-              onClick = { () => this.handleCSVSubmit() }
-            />
+                <DragAndDrop
+                  onClick = {(CSVarray) => this.handleCSVSubmit(CSVarray)}
+                />
           	</center>
           </div>
-          {this.renderRedirect()}
         </div>
       </div>
     );
