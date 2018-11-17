@@ -187,12 +187,17 @@ class App extends Component {
     console.log( "Submit button captured: \nUNval: " + UNval );
 
     // Send backend the UIN, get response
-    
+    let data = api.login(UNval);
+    //console.log(data);
 
-    //if(response is good){
+    if(data.length == 0){
     	this.setState({ phase1hidden: true,
     					phase2hidden: false });
-	//else
+    }
+	  else {
+      console.log("No prof info");
+    }
+    //Ask for first and last name, call addProfessor(
 		//set error message visible
     //this.setState( prevState => { phase1hidden: !prevState.phase1hidden } );
   }
