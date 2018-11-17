@@ -134,6 +134,30 @@ class AddClassInfoBoxes extends Component {
 }
 
 
+class ProfNameBoxes extends Component {
+
+  render() {
+    return(
+      <div>
+        <textarea
+          className = "AddProfFirstName"
+          placeholder = "First Name"
+        />
+        <textarea
+          classNum = "AddProfLastName"
+          placeholder = "Last Name"
+        />
+        <textarea
+          classSec = "AddProfUIN"
+          placeholder = "xxxxxxxxx"
+        />
+      </div>
+    );
+  }
+
+}
+
+
 class App extends Component {
 
   constructor(props) {
@@ -145,6 +169,7 @@ class App extends Component {
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCSVSubmit = this.handleCSVSubmit.bind(this);
+    this.handleNewProfSubmit = this.handleNewProfSubmit.bind(this);
     this.handleDragAndDropShow = this.handleDragAndDropShow.bind(this);
     this.state = {
       UNval: "un",
@@ -187,9 +212,11 @@ class App extends Component {
     console.log( "Submit button captured: \nUNval: " + UNval );
 
     // Send backend the UIN, get response
-    let data = api.login(UNval);
+     api.login(UNval).then(data => {
+      console.log(data);
+     });
     //console.log(data);
-
+/*
     if(data.length == 0){
     	this.setState({ phase1hidden: true,
     					phase2hidden: false });
@@ -197,6 +224,7 @@ class App extends Component {
 	  else {
       console.log("No prof info");
     }
+  */
     //Ask for first and last name, call addProfessor(
 		//set error message visible
     //this.setState( prevState => { phase1hidden: !prevState.phase1hidden } );
@@ -208,6 +236,11 @@ class App extends Component {
 
     console.log( "Class Info Submitted:" + ClassInfo);
     console.log( "CSV Submitted", CSVarray );
+  }
+
+  handleNewProfSubmit() {
+
+
   }
 
   handleDragAndDropShow() {
