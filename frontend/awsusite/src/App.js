@@ -3,6 +3,8 @@ import { Redirect } from "react-router";
 import Dropzone from 'react-dropzone'
 import "./App.css";
 
+import * as api from "./apiCalls.js";
+
 
 class Submitbutton extends Component {
 
@@ -19,6 +21,21 @@ class Submitbutton extends Component {
 
 }
 
+class AddClassButton extends Component {
+
+  render() {
+    return(
+        <button
+          className = "AddClassButton"
+          onClick = {this.props.onClick}
+        >
+          Add Class
+        </button>
+    );
+  }
+
+}
+
 class DragAndDrop extends React.Component {
   constructor() {
     super()
@@ -29,8 +46,6 @@ class DragAndDrop extends React.Component {
   }
 
   render() {
-
-    const CSVarray = this.state.accepted;
 
     return (
       <section>
@@ -81,7 +96,7 @@ class Authbox extends Component {
       <div>
         <textarea
           className = "UINform"
-          placeholder = "Username"
+          placeholder = "UIN"
           onChange = {this.props.onUNChange}
         />
       </div>
@@ -95,16 +110,15 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.handleUNChange = this.handleUNChange.bind(this);
-    this.handlePWChange = this.handlePWChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCSVSubmit = this.handleCSVSubmit.bind(this);
+    this.handleDragAndDropShow = this.handleDragAndDropShow.bind(this);
     this.state = {
       UNval: "un",
-      PWval: "pw",
       redirect: false,
       phase1hidden: false,
       phase2hidden: true,
-
+      DragAndDropHidden: true,
       CSVfiles: []
     };
   }
@@ -115,15 +129,9 @@ class App extends Component {
     console.log( "New Unval = " + e.target.value );
   }
 
-  handlePWChange(e) {
-    this.setState({ PWval: e.target.value });
-    console.log( "New PWval = " + e.target.value );
-  }
-
   handleSubmit() {
     const UNval = this.state.UNval;
-    const PWval = this.state.PWval;
-    console.log( "Submit button captured: \nUNval: " + UNval + "\nPWval: " + PWval );
+    console.log( "Submit button captured: \nUNval: " + UNval );
     // Hash PWval and send it somewhere
 
     // Send backend the UIN, get response
@@ -139,6 +147,12 @@ class App extends Component {
   handleCSVSubmit(CSVarray) {
     console.log( "CSV Submitted", CSVarray );
   	//this.setState({CSVfiles: state.accepted });
+
+  }
+
+  handleDragAndDropShow() {
+    console.log("Show Drag and Drop button clicked");
+    this.setState({DragAndDropHidden: false})
   }
 
   renderRedirect = () => {
@@ -176,11 +190,17 @@ class App extends Component {
           	<center>
           	<br/>
           	<p> Class list shown here </p>	
-			<br/>
-
-                <DragAndDrop
-                  onClick = {(CSVarray) => this.handleCSVSubmit(CSVarray)}
-                />
+			      <br/>
+            <AddClassButton
+              onClick = { () => this.handleDragAndDropShow() }
+            />
+            <div id = "DaD"
+              hidden = {this.state.DragAndDropHidden}
+            >
+              <DragAndDrop
+                 onClick = {(CSVarray) => this.handleCSVSubmit(CSVarray)}
+              />
+            </div>
           	</center>
           </div>
         </div>
