@@ -96,7 +96,7 @@ function trackAttendance(studUin, courseName, date) {
     .catch(error => console.error(error));
 }
 
-let getAttendance = (courseName) => {
+function getAttendance(courseName) {
     callApi('localhost:3001/api/attendance' + courseName, {}, "GET")
       .then(data => {
         console.log(data);
@@ -105,7 +105,7 @@ let getAttendance = (courseName) => {
       .catch(error => console.error(error));
 }
 
-let getRoster = (courseName) => {
+function getRoster(courseName){
     callApi('localhost:3001/api/roster' + courseName, {}, "GET")
       .then(data => {
         console.log(data);
@@ -114,7 +114,7 @@ let getRoster = (courseName) => {
       .catch(error => console.error(error));
 }
 
-let login = (uin) => {
+function login(uin) {
   callApi('localhost:3001/api/login/' + uin, {}, "GET")
     .then(data => {
       console.log(data);

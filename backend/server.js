@@ -9,6 +9,7 @@ app.use(bodyParser.json());
 app.use(function(req, res, next) {
 	res.header("Access-Control-Allow-Origin", "*");
 	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+	res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
 	next();
 })
 let port = 3001;
@@ -17,7 +18,6 @@ let router = express.Router();
 // General API for testing
 router.route('/')
 	.get(function(req, res) {
-		console.log(req.body);
 		res.json({message: "API works"});
 	})
 	.post(function(req, res) {
@@ -58,36 +58,12 @@ router.route('/student')
 		res.json({message: 'Success'});
 	});
 
-router.route('/student/rfid')
-	.put(function(req, res) {
-		api_funcs.update_student_rfid(req.body.uin, req.body.rfid);
-		res.json({message: 'Success'});
-	})
-
-router.route('/student/card')
-	.put(function(req, res) {
-		api_funcs.update_student_card(req.body.uin, req.body.card);
-		res.json({message: 'Success'});
-	})
-
 // Add new professor
 router.route('/professor')
 	.post(function(req, res) {
 		api_funcs.add_professor(req.body.uin, req.body.first, req.body.last);
 		res.json({message: 'Success'});
 	});
-
-router.route('/professor/rfid')
-	.put(function(req, res) {
-		api_funcs.update_professor_rfid(req.body.uin, req.body.rfid);
-		res.json({message: 'Success'});
-	})
-
-router.route('/professor/card')
-	.put(function(req, res) {
-		api_funcs.update_professor_card(req.body.uin, req.body.card);
-		res.json({message: 'Success'});
-	})
 
 // Set a student's attendance and return num attended
 router.route('/attendance')
@@ -114,22 +90,26 @@ router.route('/login/:uin')
 	.get(function(req, res) {
 		api_funcs.get_courses(req.params.uin).then(data => {
 			res.json({data:data});
-		})
+		});
 	})
 
 // Gets roster for a course
 router.route('/roster/:course_name')
 	.get(function(req, res) {
-		api_funcs.get_roster(req.params.uin).then(data => {
+		api_funcs.get_roster(req.params.course_name).then(data => {
 			res.json({data: data});
-		})
-	})
-/* 
+		});
+	});
 
-	update prof card/rfid()
-	update stud card/rfid()
-	
-*/
+// Updates the RFID/Card for professor/student
+router.route('/card')
+	.put(function(req, res) {
+		api_funcs.update_card(req.body.uin, req.body.card).then(data => {
+			res.json({data: data});
+		});
+	});
+
+// Send prof data
 
 // Start server
 app.use('/api', router);
