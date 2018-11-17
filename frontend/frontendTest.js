@@ -30,6 +30,8 @@ function callApi(url = '', data = {}, type = '') {
   On the pi:
 
   *) let roster = getRoster("CSCE_121_500");
+    roster[0].uin, roster[0].firstName, roster[0].lastName, roster[0].cardNum, 
+    roster[0].rfidNum, roster[1].uin, etc.
   *) addAttendanceDay("CSCE_121_500", "2018_11_14");
   *) let data = trackAttendance("111001111", "CSCE_121_500", "2018_11_14");
       increases attendance for student and returns:

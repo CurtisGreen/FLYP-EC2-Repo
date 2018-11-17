@@ -148,12 +148,43 @@ let get_roster = (course_name) => {
 	});
 }
 
-//let insert_student_rfid
+let update_student_rfid = (uin, rfid) => {
+	return new Promise ((resolve, reject) => {
+		resolve(`UPDATE Capstone.students
+					SET rfidNum = ` + rfid + 
+					" WHERE uin = " + uin + ";");
+	});
+}
+
+let update_professor_rfid = (uin, rfid) => {
+	return new Promise ((resolve, reject) => {
+		resolve(`UPDATE Capstone.professors
+					SET rfidNum = ` + rfid + 
+					" WHERE uin = " + uin + ";");
+	});
+}
+
+let update_student_card = (uin, card) => {
+	return new Promise ((resolve, reject) => {
+		resolve(`UPDATE Capstone.students
+					SET cardNum = ` + card + 
+					" WHERE uin = " + uin + ";");
+	});
+}
+
+let update_professor_card = (uin, card) => {
+	return new Promise ((resolve, reject) => {
+		resolve(`UPDATE Capstone.professors
+					SET cardNum = ` + card + 
+					" WHERE uin = " + uin + ";");
+	});
+}
 
 // Export to be used in other file
 module.exports = {
 	add_student, add_professor, insert_course, create_attendance_table,
 	populate_course, add_date_column, update_attendance, inc_days_attended,
 	inc_course_days, get_num_attended, get_num_class_days, get_attendance,
-	get_courses, get_roster
+	get_courses, get_roster, update_student_rfid, update_professor_rfid,
+	update_student_card, update_professor_card
 };

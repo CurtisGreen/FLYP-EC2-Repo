@@ -101,9 +101,6 @@ router.route('/roster/:course_name')
 		})
 	})
 /* 
-	Login()
-		input: uin
-		output: exists, list of classes
 
 	update prof card/rfid()
 	update stud card/rfid()

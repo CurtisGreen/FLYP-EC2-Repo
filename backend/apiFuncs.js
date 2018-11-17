@@ -293,6 +293,22 @@ let get_roster = (course_name) => {
 	})
 }
 
+function update_student_rfid(uin, course_name){
+
+	sql_queries.inc_days_attended(uin, course_name).then(query => {
+		sql_conn.query(query, function (error, results, fields){
+			if (error) {
+				console.error(error);
+			}
+			else {
+				console.log("\nStudent " + uin + " attendance for " + course_name + " increased");
+			}
+		});
+	});
+	
+}
+
+
 // Parses array of json to csv string
 let parse_attendance_table = (results) => {
 	return new Promise ((resolve, reject) => {
