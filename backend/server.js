@@ -58,12 +58,36 @@ router.route('/student')
 		res.json({message: 'Success'});
 	});
 
+router.route('/student/rfid')
+	.put(function(req, res) {
+		api_funcs.update_student_rfid(req.body.uin, req.body.rfid);
+		res.json({message: 'Success'});
+	})
+
+router.route('/student/card')
+	.put(function(req, res) {
+		api_funcs.update_student_card(req.body.uin, req.body.card);
+		res.json({message: 'Success'});
+	})
+
 // Add new professor
 router.route('/professor')
 	.post(function(req, res) {
 		api_funcs.add_professor(req.body.uin, req.body.first, req.body.last);
 		res.json({message: 'Success'});
 	});
+
+router.route('/professor/rfid')
+	.put(function(req, res) {
+		api_funcs.update_professor_rfid(req.body.uin, req.body.rfid);
+		res.json({message: 'Success'});
+	})
+
+router.route('/professor/card')
+	.put(function(req, res) {
+		api_funcs.update_professor_card(req.body.uin, req.body.card);
+		res.json({message: 'Success'});
+	})
 
 // Set a student's attendance and return num attended
 router.route('/attendance')
