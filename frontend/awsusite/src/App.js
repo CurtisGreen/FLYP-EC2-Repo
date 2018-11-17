@@ -50,7 +50,6 @@ class DragAndDrop extends React.Component {
     return (
       <section>
         <div className="dropzone">
-        <h2>Create Class</h2>
           <Dropzone
             accept="image/jpeg, image/png, text/csv"
             onDrop={(accepted, rejected) => { this.setState({ accepted, rejected }); }}
@@ -82,10 +81,13 @@ class DragAndDrop extends React.Component {
   }
 }
 
-
-
-
-
+/* Old stuff
+  <textarea
+    className = "UINform"
+    placeholder = "UIN"
+    onChange = {this.props.onUNChange}
+  />
+*/
 
 
 
@@ -105,16 +107,50 @@ class Authbox extends Component {
 
 }
 
+class AddClassInfoBoxes extends Component {
+
+  render() {
+    return(
+      <div>
+        <textarea
+          className = "AddClassName"
+          placeholder = "xxxx"
+          onChange = {this.props.onClassNameChange}
+        />
+        <textarea
+          classNum = "AddClassNum"
+          placeholder = "xxx"
+          onChange = {this.props.onClassNumChange}
+        />
+        <textarea
+          classSec = "AddClassSec"
+          placeholder = "xxx"
+          onChange = {this.props.onClassSecChange}
+        />
+      </div>
+    );
+  }
+
+}
+
+
 class App extends Component {
 
   constructor(props) {
     super(props);
     this.handleUNChange = this.handleUNChange.bind(this);
+    this.handleClassNameChange = this.handleClassNameChange.bind(this);
+    this.handleClassNumChange = this.handleClassNumChange.bind(this);
+    this.handleClassSecChange = this.handleClassSecChange.bind(this);
+
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCSVSubmit = this.handleCSVSubmit.bind(this);
     this.handleDragAndDropShow = this.handleDragAndDropShow.bind(this);
     this.state = {
       UNval: "un",
+      ClassName: "null",
+      ClassNum: "000",
+      ClassSec: "000",
       redirect: false,
       phase1hidden: false,
       phase2hidden: true,
@@ -129,12 +165,29 @@ class App extends Component {
     console.log( "New Unval = " + e.target.value );
   }
 
+  handleClassNameChange(e) {
+    this.setState({ ClassName: e.target.value });
+    console.log( "New ClassName = " + e.target.value );
+  }
+
+
+  handleClassNumChange(e) {
+    this.setState({ ClassNum: e.target.value });
+    console.log( "New ClassNum = " + e.target.value );
+  }
+
+
+  handleClassSecChange(e) {
+    this.setState({ ClassSec: e.target.value });
+    console.log( "New ClassSec = " + e.target.value );
+  }
+
   handleSubmit() {
     const UNval = this.state.UNval;
     console.log( "Submit button captured: \nUNval: " + UNval );
-    // Hash PWval and send it somewhere
 
     // Send backend the UIN, get response
+    
 
     //if(response is good){
     	this.setState({ phase1hidden: true,
@@ -145,14 +198,16 @@ class App extends Component {
   }
 
   handleCSVSubmit(CSVarray) {
-    console.log( "CSV Submitted", CSVarray );
-  	//this.setState({CSVfiles: state.accepted });
+    var ClassInfo = this.state.ClassName + "_" + this.state.ClassNum + "_" + this.state.ClassSec;
+    
 
+    console.log( "Class Info Submitted:" + ClassInfo);
+    console.log( "CSV Submitted", CSVarray );
   }
 
   handleDragAndDropShow() {
-    console.log("Show Drag and Drop button clicked");
-    this.setState({DragAndDropHidden: false})
+    console.log("Show Add button clicked");
+    this.setState( prevState => ({DragAndDropHidden: !prevState.DragAndDropHidden}));
   }
 
   renderRedirect = () => {
@@ -191,12 +246,21 @@ class App extends Component {
           	<br/>
           	<p> Class list shown here </p>	
 			      <br/>
-            <AddClassButton
-              onClick = { () => this.handleDragAndDropShow() }
-            />
+            <div hidden = {!this.state.DragAndDropHidden} >
+              <AddClassButton
+                onClick = { () => this.handleDragAndDropShow() }
+              />
+            </div>
             <div id = "DaD"
               hidden = {this.state.DragAndDropHidden}
             >
+              <h2>Create Class</h2>
+              <AddClassInfoBoxes
+                onClassNameChange = {this.handleClassNameChange}
+                onClassNumChange = {this.handleClassNumChange}
+                onClassSecChange = {this.handleClassSecChange}
+              />
+              <br/>
               <DragAndDrop
                  onClick = {(CSVarray) => this.handleCSVSubmit(CSVarray)}
               />
