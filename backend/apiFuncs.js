@@ -293,15 +293,60 @@ let get_roster = (course_name) => {
 	})
 }
 
-function update_student_rfid(uin, course_name){
+function update_student_rfid(uin, rfid){
 
-	sql_queries.inc_days_attended(uin, course_name).then(query => {
+	sql_queries.update_student_rfid(uin, rfid).then(query => {
 		sql_conn.query(query, function (error, results, fields){
 			if (error) {
 				console.error(error);
 			}
 			else {
-				console.log("\nStudent " + uin + " attendance for " + course_name + " increased");
+				console.log("\nUpdated " + uin + " rfid to " + rfid);
+			}
+		});
+	});
+	
+}
+
+function update_professor_rfid(uin, rfid){
+
+	sql_queries.update_professor_rfid(uin, rfid).then(query => {
+		sql_conn.query(query, function (error, results, fields){
+			if (error) {
+				console.error(error);
+			}
+			else {
+				console.log("\nUpdated " + uin + " rfid to " + rfid);
+			}
+		});
+	});
+	
+}
+
+function update_student_card(uin, card){
+
+	sql_queries.update_student_card(uin, card).then(query => {
+		sql_conn.query(query, function (error, results, fields){
+			if (error) {
+				console.error(error);
+			}
+			else {
+				console.log("\nUpdated " + uin + " card to " + card);
+			}
+		});
+	});
+	
+}
+
+function update_professor_card(uin, card){
+
+	sql_queries.update_professor_card(uin, card).then(query => {
+		sql_conn.query(query, function (error, results, fields){
+			if (error) {
+				console.error(error);
+			}
+			else {
+				console.log("\nUpdated " + uin + " card to " + card);
 			}
 		});
 	});
@@ -340,5 +385,6 @@ module.exports = {
 	add_student, add_professor, insert_course, create_attendance_table,
 	populate_course, add_date_column, update_attendance, inc_days_attended,
 	inc_course_days, get_num_attended, get_num_class_days, get_attendance,
-	get_courses, get_roster
+	get_courses, get_roster, update_student_rfid, update_professor_rfid,
+	update_student_card, update_professor_card
 };
