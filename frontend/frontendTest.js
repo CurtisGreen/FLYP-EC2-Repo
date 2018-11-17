@@ -13,18 +13,27 @@ function callApi(url = '', data = {}, type = '') {
 }
 
 /* Example workflow:
-  0) let data = login(profUin);
+
+  On AWS:
+
+  *) let data = login(profUin);
     data.courses[0].course_id, data.courses[l].course_id, etc.
-  1) addStudent("111001111", "Curtis", "Green");
-  2) addProfessor("222002222", "notCurtis", "notGreen");
-  3) addClass("CSCE_121_500", "222002222");
-  4) addStudentToClass("CSCE_121_500", "111001111");
-  5) addAttendanceDay("CSCE_121_500", "2018_11_14");
-  6) let data = trackAttendance("111001111", "CSCE_121_500", "2018_11_14");
-    data.num_attended, data.num_class_days
-  7) let csv = getAttendance("CSCE_121_500");
+  *) addStudent("111001111", "Curtis", "Green");
+  *) addProfessor("222002222", "notCurtis", "notGreen");
+  *) addClass("CSCE_121_500", "222002222");
+  *) addStudentToClass("CSCE_121_500", "111001111");
+  *) let csv = getAttendance("CSCE_121_500");
     csv is a string in csv format
     download csv
+
+
+  On the pi:
+
+  *) let roster = getRoster("CSCE_121_500");
+  *) addAttendanceDay("CSCE_121_500", "2018_11_14");
+  *) let data = trackAttendance("111001111", "CSCE_121_500", "2018_11_14");
+      increases attendance for student and returns:
+      data.num_attended, data.num_class_days
 
 */
 
@@ -86,12 +95,30 @@ function trackAttendance(studUin, courseName, date) {
 }
 
 let getAttendance = (courseName) => {
-    callApi('localhost:3001/api/attendance' + courseName, "GET")
+    callApi('localhost:3001/api/attendance' + courseName, {}, "GET")
       .then(data => {
         console.log(data);
         return data;
       })
       .catch(error => console.error(error));
+}
+
+let getRoster = (courseName) => {
+    callApi('localhost:3001/api/roster' + courseName, {}, "GET")
+      .then(data => {
+        console.log(data);
+        return data;
+      })
+      .catch(error => console.error(error));
+}
+
+let login = (uin) => {
+  callApi('localhost:3001/api/login/' + uin, {}, "GET")
+    .then(data => {
+      console.log(data);
+      return data;
+    })
+    .catch(error => console.error(error));
 }
 
 class Posts extends Component {

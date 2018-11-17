@@ -93,6 +93,7 @@ router.route('/login/:uin')
 		})
 	})
 
+// Gets roster for a course
 router.route('/roster/:course_name')
 	.get(function(req, res) {
 		api_funcs.get_roster(req.params.uin).then(data => {
@@ -104,8 +105,8 @@ router.route('/roster/:course_name')
 		input: uin
 		output: exists, list of classes
 
-	update prof uin()
-	update stud uin()
+	update prof card/rfid()
+	update stud card/rfid()
 	
 */
 
