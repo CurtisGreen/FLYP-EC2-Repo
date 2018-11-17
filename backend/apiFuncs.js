@@ -40,6 +40,8 @@ sql_conn.connect( function(err){
 	//get_attendance(course_name);
 	//get_courses(prof_uin);
 	//get_roster(course_name);
+	//check_professor_exists(prof_uin);
+	update_card(prof_uin, "123");
 
 });
 
@@ -293,6 +295,82 @@ let get_roster = (course_name) => {
 	})
 }
 
+// Update the RFID/Card of a student/prof
+function update_card(uin, card){
+	let isCard = false;
+	let isRfid = false;
+
+	if (uin != null && card != null){
+		
+		// Determine card/rfid
+		if (card.length > 10){
+			console.log("length");
+			isCard = true;
+		}
+		else {
+			isRfid = true;
+		}
+		// Determine prof/student
+		check_professor_exists(uin).then(isProf => {
+			if (isProf && isRfid){
+				update_professor_rfid(uin, card);
+			}
+			else if (isProf && isCard){
+				update_professor_card(uin, card);
+			}
+			else {
+				check_student_exists(uin).then(isStud => {
+					if (isStud && isRfid){
+						update_student_rfid(uin, card);
+					}
+					else if (isStud && isCard){
+						update_student_card(uin, card);
+					}
+					else {
+						console.log("UIN is not found");
+					}
+				});
+			}
+		});
+	}
+	else {
+		console.log("UIN or card is NULL");
+	}
+}
+
+let check_professor_exists = (uin) => {
+	return new Promise ((resolve, reject) => {
+		sql_queries.check_professor_exists(uin).then(query => {
+			sql_conn.query(query, function (error, results, fields){
+				if (error) {
+					console.error(error);
+				}
+				else {
+					resolve(results[0]['COUNT(uin)'] >= 1);
+				}
+			});
+		});
+	});
+	
+	
+}
+
+function check_student_exists(uin){
+
+	sql_queries.check_student_exists(uin).then(query => {
+		sql_conn.query(query, function (error, results, fields){
+			if (error) {
+				console.error(error);
+			}
+			else {
+				return results[0]['COUNT(uin)'] == 1 ? true: false;
+			}
+		});
+	});
+	
+}
+
+
 function update_student_rfid(uin, rfid){
 
 	sql_queries.update_student_rfid(uin, rfid).then(query => {
@@ -385,6 +463,5 @@ module.exports = {
 	add_student, add_professor, insert_course, create_attendance_table,
 	populate_course, add_date_column, update_attendance, inc_days_attended,
 	inc_course_days, get_num_attended, get_num_class_days, get_attendance,
-	get_courses, get_roster, update_student_rfid, update_professor_rfid,
-	update_student_card, update_professor_card
+	get_courses, get_roster, update_card
 };

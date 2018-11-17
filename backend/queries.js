@@ -180,11 +180,30 @@ let update_professor_card = (uin, card) => {
 	});
 }
 
+let check_professor_exists = (uin) => {
+	return new Promise ((resolve, reject) => {
+		resolve (`SELECT COUNT(uin) 
+					FROM Capstone.professors
+					WHERE uin=` + uin + ';'
+				);
+	});
+}
+
+let check_student_exists = (uin) => {
+	return new Promise ((resolve, reject) => {
+		resolve (`SELECT COUNT(uin) 
+					FROM Capstone.students
+					WHERE uin=` + uin + ';'
+				);
+	});
+}
+
 // Export to be used in other file
 module.exports = {
 	add_student, add_professor, insert_course, create_attendance_table,
 	populate_course, add_date_column, update_attendance, inc_days_attended,
 	inc_course_days, get_num_attended, get_num_class_days, get_attendance,
 	get_courses, get_roster, update_student_rfid, update_professor_rfid,
-	update_student_card, update_professor_card
+	update_student_card, update_professor_card, check_professor_exists, 
+	check_student_exists
 };
