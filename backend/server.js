@@ -85,6 +85,20 @@ router.route('/attendance/:course_name')
 		})
 	})
 
+// Get classes on login
+router.route('/login/:uin')
+	.get(function(req, res) {
+		api_funcs.get_courses(req.params.uin).then(data => {
+			res.json({data:data});
+		})
+	})
+
+router.route('/roster/:course_name')
+	.get(function(req, res) {
+		api_funcs.get_roster(req.params.uin).then(data => {
+			res.json({data: data});
+		})
+	})
 /* 
 	Login()
 		input: uin
