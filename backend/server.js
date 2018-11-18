@@ -84,6 +84,7 @@ router.route('/professor/:uin/courses')
 router.route('/professor/:uin/exists')
 	.get(function(req, res) {
 		api_funcs.check_professor_exists(req.params.uin).then(data => {
+			console.log("\nChecked if professor " + req.params.uin + " exists");
 			res.json({data:data});
 		});
 	});
