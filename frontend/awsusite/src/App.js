@@ -139,6 +139,8 @@ class ProfNameBoxes extends Component {
   render() {
     return(
       <div>
+        <h2> Enter your first name, last name, and UIN to continute </h2>
+        <br/>
         <textarea
           className = "AddProfFirstName"
           placeholder = "First Name"
@@ -149,7 +151,7 @@ class ProfNameBoxes extends Component {
         />
         <textarea
           classSec = "AddProfUIN"
-          placeholder = "xxxxxxxxx"
+          placeholder = "UIN"
         />
       </div>
     );
@@ -178,6 +180,7 @@ class App extends Component {
       ClassSec: "000",
       redirect: false,
       phase1hidden: false,
+      profNameReqHidden: true,
       phase2hidden: true,
       DragAndDropHidden: true,
       CSVfiles: []
@@ -214,17 +217,21 @@ class App extends Component {
     // Send backend the UIN, get response
      api.login(UNval).then(data => {
       console.log(data);
+      if(data.data.length == 0){ //Professor DNE
+        console.log("Data length is 0");
+        this.setState( prevState => ({profNameReqHidden: !prevState.profNameReqHidden}));
+      }
+      else{ //Professor Exists
+        console.log("Data Length:" + data.data.length)
+
+        this.setState( prevState => ({ 
+          phase1hidden: !prevState.phase1hidden,
+          phase2hidden: !prevState.phase2hidden
+         }));
+      }
      });
     //console.log(data);
-/*
-    if(data.length == 0){
-    	this.setState({ phase1hidden: true,
-    					phase2hidden: false });
-    }
-	  else {
-      console.log("No prof info");
-    }
-  */
+
     //Ask for first and last name, call addProfessor(
 		//set error message visible
     //this.setState( prevState => { phase1hidden: !prevState.phase1hidden } );
@@ -233,14 +240,18 @@ class App extends Component {
   handleCSVSubmit(CSVarray) {
     var ClassInfo = this.state.ClassName + "_" + this.state.ClassNum + "_" + this.state.ClassSec;
     
-
     console.log( "Class Info Submitted:" + ClassInfo);
     console.log( "CSV Submitted", CSVarray );
   }
 
   handleNewProfSubmit() {
 
+    console.log("New Prof Submitted");
 
+    this.setState( prevState => ({ 
+          phase1hidden: !prevState.phase1hidden,
+          phase2hidden: !prevState.phase2hidden
+         }));
   }
 
   handleDragAndDropShow() {
@@ -270,12 +281,24 @@ class App extends Component {
           <div id = "phase1"
           	hidden = {this.state.phase1hidden}
           >
-            <Authbox
-              onUNChange = {this.handleUNChange}
-            />
-            <Submitbutton
-              onClick = { () => this.handleSubmit() }
-            />
+            <div id = "phase1Main"
+              hidden = {this.state.profNameReqHidden === false}
+            >
+              <Authbox
+                onUNChange = {this.handleUNChange}
+              />
+              <Submitbutton
+                onClick = { () => this.handleSubmit() }
+              />
+            </div>
+            <div id = "profNameReq"
+              hidden = {this.state.profNameReqHidden}
+            >
+              <ProfNameBoxes/>
+              <Submitbutton
+                onClick = { () => this.handleNewProfSubmit() }
+              />
+            </div>
           </div>
           <div id = "phase2"
           	hidden = {this.state.phase2hidden}
