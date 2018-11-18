@@ -72,6 +72,22 @@ router.route('/professor')
 		});
 	});
 
+// Get list of courses
+router.route('/professor/:uin/courses')
+	.get(function(req, res) {
+		api_funcs.get_courses(req.params.uin).then(data => {
+			res.json({data:data});
+		});
+	});
+
+// Check if prof exists T/F
+router.route('/professor/:uin/exists')
+	.get(function(req, res) {
+		api_funcs.check_professor_exists(req.params.uin).then(data => {
+			res.json({data:data});
+		});
+	});
+
 // Set a student's attendance and return num attended
 router.route('/attendance')
 	.put(function(req, res) {
@@ -90,14 +106,6 @@ router.route('/attendance/:course_name')
 		api_funcs.get_attendance(req.params.course_name).then(data => {
 			res.json({data: data});
 		})
-	})
-
-// Get classes on login
-router.route('/login/:uin')
-	.get(function(req, res) {
-		api_funcs.get_courses(req.params.uin).then(data => {
-			res.json({data:data});
-		});
 	})
 
 // Gets roster for a course

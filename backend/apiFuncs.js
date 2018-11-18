@@ -368,20 +368,20 @@ let check_professor_exists = (uin) => {
 			});
 		});
 	});
-	
-	
+
 }
 
-function check_student_exists(uin){
-
-	sql_queries.check_student_exists(uin).then(query => {
-		sql_conn.query(query, function (error, results, fields){
-			if (error) {
-				console.error(error);
-			}
-			else {
-				return results[0]['COUNT(uin)'] == 1 ? true: false;
-			}
+let check_student_exists = (uin) => {
+	return new Promise ((resolve, reject) => {
+		sql_queries.check_student_exists(uin).then(query => {
+			sql_conn.query(query, function (error, results, fields){
+				if (error) {
+					console.error(error);
+				}
+				else {
+					resolve(results[0]['COUNT(uin)'] >= 1);
+				}
+			});
 		});
 	});
 	
@@ -480,5 +480,5 @@ module.exports = {
 	add_student, add_professor, insert_course, create_attendance_table,
 	populate_course, add_date_column, update_attendance, inc_days_attended,
 	inc_course_days, get_num_attended, get_num_class_days, get_attendance,
-	get_courses, get_roster, update_card, get_professors
+	get_courses, get_roster, update_card, get_professors, check_professor_exists
 };
