@@ -118,12 +118,12 @@ class AddClassInfoBoxes extends Component {
           onChange = {this.props.onClassNameChange}
         />
         <textarea
-          classNum = "AddClassNum"
+          className = "AddClassNum"
           placeholder = "xxx"
           onChange = {this.props.onClassNumChange}
         />
         <textarea
-          classSec = "AddClassSec"
+          className = "AddClassSec"
           placeholder = "xxx"
           onChange = {this.props.onClassSecChange}
         />
@@ -144,20 +144,37 @@ class ProfNameBoxes extends Component {
         <textarea
           className = "AddProfFirstName"
           placeholder = "First Name"
+          onChange = {this.props.handleProfFirstNameChange}
         />
         <textarea
-          classNum = "AddProfLastName"
+          className = "AddProfLastName"
           placeholder = "Last Name"
+          onChange = {this.props.handleProfLastNameChange}
         />
         <textarea
-          classSec = "AddProfUIN"
+          className = "AddProfUIN"
           placeholder = "UIN"
+          onChange = {this.props.handleProfUINChange}
         />
       </div>
     );
   }
 
 }
+
+class ClassList extends Component {
+  render() {
+    return (
+      <ul>
+        {this.props.items.map(item => (
+          <li key={item.id}>{item.text}</li>
+        ))}
+      </ul>
+    );
+  }
+}
+
+
 
 
 class App extends Component {
@@ -169,6 +186,10 @@ class App extends Component {
     this.handleClassNumChange = this.handleClassNumChange.bind(this);
     this.handleClassSecChange = this.handleClassSecChange.bind(this);
 
+    this.handleProfFirstNameChange = this.handleProfFirstNameChange.bind(this);
+    this.handleProfLastNameChange = this.handleProfLastNameChange.bind(this);
+    this.handleProfUINChange = this.handleProfUINChange.bind(this);
+
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCSVSubmit = this.handleCSVSubmit.bind(this);
     this.handleNewProfSubmit = this.handleNewProfSubmit.bind(this);
@@ -178,12 +199,17 @@ class App extends Component {
       ClassName: "null",
       ClassNum: "000",
       ClassSec: "000",
+      ProfFirstName: "un",
+      ProfLastName: "un",
+      ProfUIN: "un",
       redirect: false,
       phase1hidden: false,
       profNameReqHidden: true,
       phase2hidden: true,
       DragAndDropHidden: true,
-      CSVfiles: []
+      CSVfiles: [],
+      classes: [],
+      currClassName: ""
     };
   }
 
@@ -210,20 +236,32 @@ class App extends Component {
     console.log( "New ClassSec = " + e.target.value );
   }
 
+  handleProfFirstNameChange(e) {
+    this.setState({ ProfFirstName: e.target.value });
+  }
+
+  handleProfLastNameChange(e) {
+    this.setState({ ProfLastName: e.target.value });
+  }
+
+
+  handleProfUINChange(e) {
+    this.setState({ ProfUIN: e.target.value });
+  }
+
   handleSubmit() {
     const UNval = this.state.UNval;
     console.log( "Submit button captured: \nUNval: " + UNval );
 
     // Send backend the UIN, get response
-     api.login(UNval).then(data => {
+     api.professorExists(UNval).then(data => {
       console.log(data);
-      if(data.data.length == 0){ //Professor DNE
-        console.log("Data length is 0");
+      if(data.data === false){ //Professor DNE
+        console.log("Professor DNE")
         this.setState( prevState => ({profNameReqHidden: !prevState.profNameReqHidden}));
       }
       else{ //Professor Exists
-        console.log("Data Length:" + data.data.length)
-
+        console.log("Professor Exists")
         this.setState( prevState => ({ 
           phase1hidden: !prevState.phase1hidden,
           phase2hidden: !prevState.phase2hidden
@@ -246,18 +284,47 @@ class App extends Component {
 
   handleNewProfSubmit() {
 
-    console.log("New Prof Submitted");
+    var UIN = this.state.ProfUIN
+    var FirstName = this.state.ProfFirstName
+    var LastName = this.state.ProfLastName
+
+    //console.log("AddProfessor(" + UIN + "," + FirstName + "," + LastName + ")" )
+
+    api.addProfessor(UIN, FirstName, LastName)
 
     this.setState( prevState => ({ 
           phase1hidden: !prevState.phase1hidden,
           phase2hidden: !prevState.phase2hidden
          }));
+
+    console.log("New Prof Submitted");
+
   }
 
   handleDragAndDropShow() {
     console.log("Show Add button clicked");
     this.setState( prevState => ({DragAndDropHidden: !prevState.DragAndDropHidden}));
   }
+
+   handleClassListChange(e) {
+    console.log( "New Item = " + e.target.value )
+  }
+
+  handleClassListSubmit(e) {
+    if (!this.state.currClassName.length) {
+      return;
+    }
+    const newItem = {
+      currClassName: this.state.currClassName,
+      id: Date.now()
+    };
+    this.setState(state => ({
+      classes: state.classes.concat(newItem),
+      currClassName: ''
+    }));
+  }
+
+
 
   renderRedirect = () => {
     if( this.state.redirect === true ) {
@@ -294,7 +361,11 @@ class App extends Component {
             <div id = "profNameReq"
               hidden = {this.state.profNameReqHidden}
             >
-              <ProfNameBoxes/>
+              <ProfNameBoxes
+                handleProfFirstNameChange = {this.handleProfFirstNameChange}
+                handleProfLastNameChange = {this.handleProfLastNameChange}
+                handleProfUINChange = {this.handleProfUINChange}
+              />
               <Submitbutton
                 onClick = { () => this.handleNewProfSubmit() }
               />
@@ -305,7 +376,21 @@ class App extends Component {
           >
           	<center>
           	<br/>
-          	<p> Class list shown here </p>	
+          	<div>
+              <h3>Current Classes</h3>
+              <ClassList items={this.state.classes} />
+              <form onSubmit={this.handleClassListSubmit}>
+                <label htmlFor="new-todo">
+                  What needs to be done?
+                </label>
+                <input
+                  id="new-todo"
+                />
+                <button>
+                  Add #{this.state.classes.length + 1}
+                </button>
+              </form>
+            </div>
 			      <br/>
             <div hidden = {!this.state.DragAndDropHidden} >
               <AddClassButton
