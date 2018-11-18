@@ -41,7 +41,7 @@ sql_conn.connect( function(err){
 	//get_courses(prof_uin);
 	//get_roster(course_name);
 	//check_professor_exists(prof_uin);
-	update_card(prof_uin, "123");
+	//update_card(prof_uin, "123");
 
 });
 
@@ -334,7 +334,7 @@ function update_card(uin, card){
 		});
 	}
 	else {
-		console.log("UIN or card is NULL");
+		console.log("Update Card: UIN or card is NULL");
 	}
 }
 
