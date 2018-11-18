@@ -18,7 +18,6 @@ class Submitbutton extends Component {
         </button>
     );
   }
-
 }
 
 class AddClassButton extends Component {
@@ -33,10 +32,9 @@ class AddClassButton extends Component {
         </button>
     );
   }
-
 }
 
-class DragAndDrop extends React.Component {
+class DragAndDrop extends Component {
   constructor() {
     super()
     this.state = {
@@ -81,16 +79,6 @@ class DragAndDrop extends React.Component {
   }
 }
 
-/* Old stuff
-  <textarea
-    className = "UINform"
-    placeholder = "UIN"
-    onChange = {this.props.onUNChange}
-  />
-*/
-
-
-
 class Authbox extends Component {
 
   render() {
@@ -104,7 +92,6 @@ class Authbox extends Component {
       </div>
     );
   }
-
 }
 
 class AddClassInfoBoxes extends Component {
@@ -130,9 +117,7 @@ class AddClassInfoBoxes extends Component {
       </div>
     );
   }
-
 }
-
 
 class ProfNameBoxes extends Component {
 
@@ -159,23 +144,31 @@ class ProfNameBoxes extends Component {
       </div>
     );
   }
-
 }
 
 class ClassList extends Component {
+
+  handleClick(i) {
+    this.props.onClick(i);
+  }
+
   render() {
-    return (
+    return(
       <ul>
-        {this.props.items.map(item => (
-          <li key={item.id}>{item.text}</li>
+        {this.props.items.map( item => (
+          <button 
+            className = "classButton"
+            key = {item.text}
+            onClick = {() => this.handleClick(item.text)}
+          >
+            {item.text}
+          </button>
         ))}
       </ul>
     );
   }
+
 }
-
-
-
 
 class App extends Component {
 
@@ -191,6 +184,9 @@ class App extends Component {
     this.handleProfUINChange = this.handleProfUINChange.bind(this);
 
     this.handleSubmit = this.handleSubmit.bind(this);
+
+    this.handleSelectedClass = this.handleSelectedClass.bind(this);
+
     this.handleCSVSubmit = this.handleCSVSubmit.bind(this);
     this.handleNewProfSubmit = this.handleNewProfSubmit.bind(this);
     this.handleDragAndDropShow = this.handleDragAndDropShow.bind(this);
@@ -208,8 +204,7 @@ class App extends Component {
       phase2hidden: true,
       DragAndDropHidden: true,
       CSVfiles: [],
-      classes: [],
-      currClassName: ""
+      items: []
     };
   }
 
@@ -269,7 +264,6 @@ class App extends Component {
       }
      });
     //console.log(data);
-
     //Ask for first and last name, call addProfessor(
 		//set error message visible
     //this.setState( prevState => { phase1hidden: !prevState.phase1hidden } );
@@ -301,35 +295,51 @@ class App extends Component {
 
   }
 
+  handleSelectedClass( chosenClass ) {
+
+    api.getCourses( this.state.UNval ).then( data => {
+
+      console.log( "Profs courses:", data.data );
+      for( let i = 0; i < data.data.length; ++i ) {
+
+        const className = data.data[i].course_id;
+        const key = className;
+        console.log( "Adding class:" + className );
+
+        const newItem = { text: className, key: key };
+
+        this.setState( prevState => ({ 
+          items: prevState.items.concat( newItem )
+        }));
+      }
+    });
+
+    console.log( "Chose class: " + chosenClass );
+
+    this.setState( prevState => ({ 
+      tracking: !prevState.tracking,
+      currClass: chosenClass
+    }));
+
+    const currentDate = this.state.date;
+    api.addAttendanceDay( chosenClass, currentDate );
+
+    const currClass = this.state.currClass;
+    console.log( "Pulling student roster for: " + currClass );
+
+    api.getRoster( currClass ).then(data => {
+
+      this.setState({ Roster: data.data });
+
+    });
+    
+  }
+
+
+
   handleDragAndDropShow() {
     console.log("Show Add button clicked");
     this.setState( prevState => ({DragAndDropHidden: !prevState.DragAndDropHidden}));
-  }
-
-   handleClassListChange(e) {
-    console.log( "New Item = " + e.target.value )
-  }
-
-  handleClassListSubmit(e) {
-    if (!this.state.currClassName.length) {
-      return;
-    }
-    const newItem = {
-      currClassName: this.state.currClassName,
-      id: Date.now()
-    };
-    this.setState(state => ({
-      classes: state.classes.concat(newItem),
-      currClassName: ''
-    }));
-  }
-
-
-
-  renderRedirect = () => {
-    if( this.state.redirect === true ) {
-      return <Redirect to="" />
-    }
   }
 
   render() {
@@ -376,21 +386,11 @@ class App extends Component {
           >
           	<center>
           	<br/>
-          	<div>
-              <h3>Current Classes</h3>
-              <ClassList items={this.state.classes} />
-              <form onSubmit={this.handleClassListSubmit}>
-                <label htmlFor="new-todo">
-                  What needs to be done?
-                </label>
-                <input
-                  id="new-todo"
-                />
-                <button>
-                  Add #{this.state.classes.length + 1}
-                </button>
-              </form>
-            </div>
+          	<p> Class List Here </p>
+            <ClassList
+              items = {this.state.items}
+              onClick = {i => this.handleSelectedClass(i)}
+            />
 			      <br/>
             <div hidden = {!this.state.DragAndDropHidden} >
               <AddClassButton
