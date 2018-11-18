@@ -58,11 +58,18 @@ router.route('/student')
 		res.json({message: 'Success'});
 	});
 
-// Add new professor
 router.route('/professor')
+	// Add new professor
 	.post(function(req, res) {
 		api_funcs.add_professor(req.body.uin, req.body.first, req.body.last);
-		res.json({message: 'Success'});
+		
+	})
+
+	// Get list of professors
+	.get(function(req, res) {
+		api_funcs.get_professors().then(professors => {
+			res.json({professors: professors})
+		});
 	});
 
 // Set a student's attendance and return num attended
@@ -77,7 +84,7 @@ router.route('/attendance')
 		});
 	})
 
-// Return attendance table
+// Get attendance table
 router.route('/attendance/:course_name')
 	.get(function(req, res) {
 		api_funcs.get_attendance(req.params.course_name).then(data => {

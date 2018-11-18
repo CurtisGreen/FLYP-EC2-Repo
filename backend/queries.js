@@ -198,6 +198,10 @@ let check_student_exists = (uin) => {
 	});
 }
 
+let get_professors = new Promise((resolve, reject) => {
+	resolve("Select * FROM Capstone.professors;");
+});
+
 // Export to be used in other file
 module.exports = {
 	add_student, add_professor, insert_course, create_attendance_table,
@@ -205,5 +209,5 @@ module.exports = {
 	inc_course_days, get_num_attended, get_num_class_days, get_attendance,
 	get_courses, get_roster, update_student_rfid, update_professor_rfid,
 	update_student_card, update_professor_card, check_professor_exists, 
-	check_student_exists
+	check_student_exists, get_professors
 };

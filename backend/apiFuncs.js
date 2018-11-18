@@ -16,7 +16,7 @@ sql_conn.connect( function(err){
 	console.log("Connected to DB");
 
 	
-	// Test params
+	// Test params 
 	let stud_uin = 888008988;
 	let prof_uin = 999009999;
 	let course_name = "CSCE_121_500";
@@ -338,6 +338,23 @@ function update_card(uin, card){
 	}
 }
 
+let get_professors = () => {
+	return new Promise ((resolve, reject) => {
+		console.log("called for some reason");
+		sql_queries.get_professors.then(query => {
+			sql_conn.query(query, function(error, results, fields){
+				if (error) {
+						console.error(error);
+					}
+				else {
+					console.log(results);
+					resolve(JSON.parse(JSON.stringify(results)));
+				}
+			});
+		});
+	});
+}
+
 let check_professor_exists = (uin) => {
 	return new Promise ((resolve, reject) => {
 		sql_queries.check_professor_exists(uin).then(query => {
@@ -463,5 +480,5 @@ module.exports = {
 	add_student, add_professor, insert_course, create_attendance_table,
 	populate_course, add_date_column, update_attendance, inc_days_attended,
 	inc_course_days, get_num_attended, get_num_class_days, get_attendance,
-	get_courses, get_roster, update_card
+	get_courses, get_roster, update_card, get_professors
 };
