@@ -17,14 +17,15 @@ sql_conn.connect( function(err){
 
 	
 	// Test params 
-	let stud_uin = 888008988;
+	let stud_uin = 123001234;
 	let prof_uin = 999009999;
 	let course_name = "CSCE_121_500";
 	let date = "2018_11_05";
 
 	// Tests for functions
-	/*add_student(stud_uin, "stud_first", "stud_last");
-	setTimeout( add_professor.bind(null, prof_uin, "prof_first", "prof_last"), 100);
+	//add_student(stud_uin, "stud_first", "stud_last");
+	//setTimeout( populate_course.bind(null, course_name, stud_uin), 400);
+	/*setTimeout( add_professor.bind(null, prof_uin, "prof_first", "prof_last"), 100);
 	setTimeout( insert_course.bind(null, course_name, prof_uin), 200);
 	setTimeout( get_courses.bind(null, prof_uin), 250);
 	setTimeout( create_attendance_table.bind(null, course_name), 300);
@@ -146,6 +147,7 @@ function add_date_column(date, table_name){
 				console.error(error);
 			}
 			else {
+				inc_course_days(table_name);
 				console.log("\nDate column " + date + " added for " + table_name);
 			}
 		});

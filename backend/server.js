@@ -41,7 +41,6 @@ router.route('/class')
 router.route('/class/:course_name')
 	.put(function(req, res) {
 		api_funcs.add_date_column(req.body.date, req.params.course_name);
-		api_funcs.inc_course_days(req.params.course_name);
 		res.json({message: 'Success'});
 	});
 
