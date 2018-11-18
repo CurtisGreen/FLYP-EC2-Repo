@@ -327,7 +327,7 @@ function update_card(uin, card){
 						update_student_card(uin, card);
 					}
 					else {
-						console.log("UIN is not found");
+						console.log("Update_card: UIN is not found");
 					}
 				});
 			}
@@ -340,14 +340,13 @@ function update_card(uin, card){
 
 let get_professors = () => {
 	return new Promise ((resolve, reject) => {
-		console.log("called for some reason");
 		sql_queries.get_professors.then(query => {
 			sql_conn.query(query, function(error, results, fields){
 				if (error) {
 						console.error(error);
-					}
+				}
 				else {
-					console.log(results);
+					console.log("\nReturned list of professors");
 					resolve(JSON.parse(JSON.stringify(results)));
 				}
 			});
