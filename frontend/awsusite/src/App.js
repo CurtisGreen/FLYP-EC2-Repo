@@ -5,10 +5,6 @@ import "./App.css";
 
 import * as api from "./apiCalls.js";
 
-//import * as fs from 'fs';
-
-//var fs = require('fs')
-
 import { CSVLink, CSVDownload } from "react-csv";
 import ReactDOM from 'react-dom';
 
@@ -52,6 +48,8 @@ class DragAndDrop extends Component {
   }
 
   onDrop(files){
+    console.log("CSVErrMsg")
+    console.log(this.props.CSVErrMsg)
     console.log(files[0]);
     const reader = new FileReader();
     reader.onload = () => {
@@ -71,7 +69,6 @@ class DragAndDrop extends Component {
     this.setState({fileNameOutput: "File Uploaded: " + files[0].name})
 
     // GIVE readAsText to master App
-
      
   }
 
@@ -171,12 +168,7 @@ class ProfNameBoxes extends Component {
 }
 
 class ClassList extends Component {
-  constructor() {
-    super()
-    this.state = {
-      message: ""
-    }
-  }
+
   handleClick(i) {
     this.props.onClick(i);
   }
@@ -238,6 +230,7 @@ class App extends Component {
       items: [],
       currClass: "",
       rawCSV: "",
+      CSVErrMsg: "hello"
     };
   }
 
@@ -336,14 +329,15 @@ class App extends Component {
 
     //var rawCSV = JSON.stringify(CSVarray);
     
-    console.log("test", CSVarray);
-    console.log(this.state.rawCSV)
 
-    //var StreamFile = require('stream-file');
-
-    //var stream = new StreamFile(CSVarray);
-
-
+    if(this.state.rawCSV == ""){
+      this.setState({CSVErrMsg: "Please upload a valid .csv roster file from Howdy."})
+      console.log("no CSV file")
+      return //Return early
+    }
+    else{
+      console.log("CSV file found")
+    }
     
     // parse_csv code below
      var all_lines = this.state.rawCSV.split("\n");
