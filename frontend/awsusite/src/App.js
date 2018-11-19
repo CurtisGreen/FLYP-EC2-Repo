@@ -45,8 +45,28 @@ class DragAndDrop extends Component {
     super()
     this.state = {
       accepted: [],
-      rejected: []
+      rejected: [],
+      rawCSV: "",
     }
+  }
+
+  onDrop(files){
+    console.log(files[0]);
+    const reader = new FileReader();
+    reader.onload = () => {
+      const readAsText = reader.result;
+      console.log(readAsText)
+      this.setState({ rawCSV: readAsText })
+      this.props.CSVtoText( reader.result );
+    };
+    reader.onabort = () => console.log('file reading aborted');
+    reader.onerror = () => console.log('file reading error');
+    
+    reader.readAsText(files[0])
+
+    // GIVE readAsText to master App
+
+     
   }
 
   render() {
@@ -56,7 +76,8 @@ class DragAndDrop extends Component {
         <div className="dropzone">
           <Dropzone
             accept="image/jpeg, image/png, text/csv"
-            onDrop={(accepted, rejected) => { this.setState({ accepted, rejected }); }}
+            onDrop={this.onDrop.bind(this)}
+        
           >
             <p>Drag and drop the class roster (.csv file) from Howdy.</p>
           </Dropzone>
@@ -165,7 +186,7 @@ class ClassList extends Component {
           <div>
           <br/>
           <button 
-            className = "Submitbutton"
+            className = "ClassButton"
             key = {item.text}
             onClick = {() => this.handleClick(item.text)}
           >
@@ -200,6 +221,7 @@ class App extends Component {
     this.handleCSVSubmit = this.handleCSVSubmit.bind(this);
     this.handleNewProfSubmit = this.handleNewProfSubmit.bind(this);
     this.handleDragAndDropShow = this.handleDragAndDropShow.bind(this);
+    this.setCSVtoText = this.setCSVtoText.bind(this);
     this.state = {
       UNval: "un",
       ClassName: "null",
@@ -213,10 +235,14 @@ class App extends Component {
       profNameReqHidden: true,
       phase2hidden: true,
       DragAndDropHidden: true,
-      CSVfiles: [],
       items: [],
-      currClass: ""
+      currClass: "",
+      rawCSV: "",
     };
+  }
+
+  getCSVInput(rawCSV){
+    this.setState({rawCSV: rawCSV});
   }
 
   // target = textarea, .value = what's in the textarea
@@ -309,14 +335,21 @@ class App extends Component {
     //console.log( "Class Info Submitted:" + ClassInfo);
 
     //var rawCSV = JSON.stringify(CSVarray);
-    //console.log(rawCSV);
+    
+    console.log("test", CSVarray);
+    console.log(this.state.rawCSV)
 
-    /*
+    //var StreamFile = require('stream-file');
+
+    //var stream = new StreamFile(CSVarray);
+
+
+    
     // parse_csv code below
-     var all_lines = infile.split("\n");
+     var all_lines = this.state.rawCSV.split("\n");
       var col_headers = all_lines[0].split(',');
       var lines = [];
-      /*1-last name, 2-first-name, 4-uin
+      //1-last name, 2-first-name, 4-uin
       var last_name_list = [];
       var first_name_list = [];
       var uin_list = [];
@@ -329,7 +362,25 @@ class App extends Component {
         uin_list.push(data[3]);
       }
       ///////////////
-    */
+
+      api.addClass(ClassInfo, this.state.UNval);
+      let functionArr = []; 
+
+      for(var i = 0; i < last_name_list.length; i++){
+
+        setTimeout(api.addStudent.bind(null, uin_list[i], first_name_list[i], last_name_list[i]), i*10000);
+        setTimeout(api.addStudentToClass.bind(null, ClassInfo, uin_list[i]), i*10000+1000);
+
+        console.log(uin_list[i] + "," + first_name_list[i] + "," + last_name_list[i])
+      }
+
+      //Promise.all(functionArr).then(stuff => stuff.map(res => console.log(res)));
+
+      this.setState( prevState => ({ 
+          DragAndDropHidden: !prevState.DragAndDropHidden,
+       }));
+    
+    this.fetchClasses()
 
   }
 
@@ -355,6 +406,8 @@ class App extends Component {
   fetchClasses() {
 
     const UNval = this.state.UNval;
+
+    this.setState({items: []});
 
     api.getCourses( UNval ).then( data => {
 
@@ -418,6 +471,13 @@ class App extends Component {
   handleDragAndDropShow() {
     console.log("Show Add button clicked");
     this.setState( prevState => ({DragAndDropHidden: !prevState.DragAndDropHidden}));
+  }
+
+  setCSVtoText(i) {
+
+    console.log( "rawCSV set to:", i );
+    this.setState({ rawCSV: i });
+
   }
 
   render() {
@@ -488,6 +548,7 @@ class App extends Component {
               <br/>
               <DragAndDrop
                  onClick = {(CSVarray) => this.handleCSVSubmit(CSVarray)}
+                 CSVtoText = {i => this.setCSVtoText(i)}
               />
             </div>
           	</center>
