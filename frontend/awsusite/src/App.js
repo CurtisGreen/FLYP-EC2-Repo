@@ -5,6 +5,12 @@ import "./App.css";
 
 import * as api from "./apiCalls.js";
 
+//import * as fs from 'fs';
+
+//var fs = require('fs')
+
+import { CSVLink, CSVDownload } from "react-csv";
+import ReactDOM from 'react-dom';
 
 class Submitbutton extends Component {
 
@@ -204,7 +210,8 @@ class App extends Component {
       phase2hidden: true,
       DragAndDropHidden: true,
       CSVfiles: [],
-      items: []
+      items: [],
+      currClass: ""
     };
   }
 
@@ -261,6 +268,7 @@ class App extends Component {
           phase1hidden: !prevState.phase1hidden,
           phase2hidden: !prevState.phase2hidden
          }));
+        this.fetchClasses()
       }
      });
     //console.log(data);
@@ -292,12 +300,14 @@ class App extends Component {
          }));
 
     console.log("New Prof Submitted");
-
+    this.fetchClasses()
   }
 
-  handleSelectedClass( chosenClass ) {
+  fetchClasses() {
 
-    api.getCourses( this.state.UNval ).then( data => {
+    const UNval = this.state.UNval;
+
+    api.getCourses( UNval ).then( data => {
 
       console.log( "Profs courses:", data.data );
       for( let i = 0; i < data.data.length; ++i ) {
@@ -312,7 +322,11 @@ class App extends Component {
           items: prevState.items.concat( newItem )
         }));
       }
+
     });
+  }
+
+  handleSelectedClass( chosenClass ) {
 
     console.log( "Chose class: " + chosenClass );
 
@@ -325,17 +339,25 @@ class App extends Component {
     api.addAttendanceDay( chosenClass, currentDate );
 
     const currClass = this.state.currClass;
-    console.log( "Pulling student roster for: " + currClass );
+    console.log( "Pulling student roster for: " + chosenClass );
 
-    api.getRoster( currClass ).then(data => {
+    api.getAttendance( chosenClass ).then(data => {
+      console.log("getRoster():")
+      console.log(data.data)
+      var rosterCSV = data.data
 
-      this.setState({ Roster: data.data });
+      //this.setState({ Roster: data.data });
+
+      //Output .csv file for browser download
+      const element= (<CSVDownload data={rosterCSV} target="_blank" />);
+ 
+      ReactDOM.render(element, document.querySelector('#app'));
+
+      //<CSVDownload data={rosterCSV} target="_blank" />;
 
     });
     
   }
-
-
 
   handleDragAndDropShow() {
     console.log("Show Add button clicked");
