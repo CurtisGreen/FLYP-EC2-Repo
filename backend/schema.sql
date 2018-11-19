@@ -6,7 +6,8 @@ CREATE TABLE IF NOT EXISTS Capstone.professors (
 	uin CHAR(9) NOT NULL PRIMARY KEY,
     firstName VARCHAR(20) NOT NULL,
     lastName VARCHAR(20) NOT NULL,
-    cardNum VARCHAR(64) NOT NULL
+    cardNum VARCHAR(64),
+    rfidNum VARCHAR(10)
 );
 
 
@@ -14,8 +15,8 @@ CREATE TABLE IF NOT EXISTS Capstone.students (
 	uin CHAR(9) NOT NULL PRIMARY KEY,
     firstName VARCHAR(20) NOT NULL,
     lastName VARCHAR(20) NOT NULL,
-    cardNum VARCHAR(64) NOT NULL,
-	rfidNum VARCHAR(10) NOT NULL
+    cardNum VARCHAR(64),
+	rfidNum VARCHAR(10)
 ); 
 
 

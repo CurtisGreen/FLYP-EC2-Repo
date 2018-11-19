@@ -61,7 +61,7 @@ class DragAndDrop extends Component {
     reader.onabort = () => console.log('file reading aborted');
     reader.onerror = () => console.log('file reading error');
     
-    reader.readAsText(files[0])
+    reader.readAsText(files[0]);
 
     console.log("Get Filename: ")
     console.log(files[0].name)
