@@ -428,7 +428,7 @@ class App extends Component {
     }));
 
     const currentDate = this.state.date;
-    api.addAttendanceDay( chosenClass, currentDate );
+    //api.addAttendanceDay( chosenClass, currentDate );
 
     const currClass = this.state.currClass;
     console.log( "Pulling student roster for: " + chosenClass );
