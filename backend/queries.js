@@ -83,7 +83,7 @@ let update_attendance = (uin, course_name, date) => {
 	return new Promise ((resolve, reject) => {
 		resolve("UPDATE Capstone." + course_name + 
 					" SET " + date + "= TRUE" + 
-					" WHERE uin = " + uin + ";");
+					" WHERE uin = '" + uin + "';");
 	});
 }
 
@@ -92,7 +92,7 @@ let inc_days_attended = (uin, course_name) => {
 	return new Promise ((resolve, reject) => {
 		resolve(`UPDATE Capstone.` + course_name + `
 					SET classes_attended = classes_attended + 1 
-					WHERE uin = ` + uin + ";");
+					WHERE uin = '` + uin + "';");
 	});
 }
 
@@ -135,7 +135,7 @@ let get_courses = (uin) => {
 	return new Promise ((resolve, reject) => {
 		resolve(`SELECT course_id
 					FROM Capstone.courses
-					WHERE uin = ` + uin + ';'
+					WHERE uin = '` + uin + "';"
 				);
 	});
 }
@@ -160,7 +160,7 @@ let update_professor_rfid = (uin, rfid) => {
 	return new Promise ((resolve, reject) => {
 		resolve(`UPDATE Capstone.professors
 					SET rfidNum = ` + rfid + 
-					" WHERE uin = " + uin + ";");
+					" WHERE uin = '" + uin + "';");
 	});
 }
 
@@ -168,7 +168,7 @@ let update_student_card = (uin, card) => {
 	return new Promise ((resolve, reject) => {
 		resolve(`UPDATE Capstone.students
 					SET cardNum = ` + card + 
-					" WHERE uin = " + uin + ";");
+					" WHERE uin = '" + uin + "';");
 	});
 }
 
@@ -176,7 +176,7 @@ let update_professor_card = (uin, card) => {
 	return new Promise ((resolve, reject) => {
 		resolve(`UPDATE Capstone.professors
 					SET cardNum = ` + card + 
-					" WHERE uin = " + uin + ";");
+					" WHERE uin = '" + uin + "';");
 	});
 }
 
@@ -184,7 +184,7 @@ let check_professor_exists = (uin) => {
 	return new Promise ((resolve, reject) => {
 		resolve (`SELECT COUNT(uin) 
 					FROM Capstone.professors
-					WHERE uin=` + uin + ';'
+					WHERE uin='` + uin + "';"
 				);
 	});
 }
@@ -193,7 +193,7 @@ let check_student_exists = (uin) => {
 	return new Promise ((resolve, reject) => {
 		resolve (`SELECT COUNT(uin) 
 					FROM Capstone.students
-					WHERE uin=` + uin + ';'
+					WHERE uin='` + uin + "';"
 				);
 	});
 }

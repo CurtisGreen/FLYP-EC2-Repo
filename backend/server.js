@@ -45,17 +45,20 @@ router.route('/class/:course_name')
 	});
 
 router.route('/student')
-	// Add new student
+	// Add new students and add students to the class
 	.post(function(req, res) {
+		api_funcs.add_and_populate(req.body.uin, req.body.first, req.body.last, req.body.course);
+		res.json({message: 'Success'});
+	})
+	/*.post(function(req, res) {
 		api_funcs.add_student(req.body.uin, req.body.first, req.body.last);
-		
 	})
 
 	// Add student to class
 	.put(function(req, res) {
 		api_funcs.populate_course(req.body.course_name, req.body.uin);
 		res.json({message: 'Success'});
-	});
+	});*/
 
 router.route('/professor')
 	// Add new professor

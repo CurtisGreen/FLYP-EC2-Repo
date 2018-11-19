@@ -47,6 +47,20 @@ sql_conn.connect( function(err){
 
 });
 
+// Add new students and populate a course
+function add_and_populate(uin, first, last, course_name){
+	if (uin == null || uin.length == 0){
+		console.log("Warning: New roster is empty");
+	}
+	else {
+		for (let i = 0; i < uin.length; i++){
+			add_student(uin[i], first[i], last[i]);
+			populate_course(course_name, uin[i]);
+		}
+	}
+}
+
+
 // Add new student
 function add_student(uin, first_name, last_name){
 
@@ -489,5 +503,6 @@ module.exports = {
 	add_student, add_professor, insert_course, create_attendance_table,
 	populate_course, add_date_column, update_attendance, inc_days_attended,
 	inc_course_days, get_num_attended, get_num_class_days, get_attendance,
-	get_courses, get_roster, update_card, get_professors, check_professor_exists
+	get_courses, get_roster, update_card, get_professors, check_professor_exists,
+	add_and_populate
 };
