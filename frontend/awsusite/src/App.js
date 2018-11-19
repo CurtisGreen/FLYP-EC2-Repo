@@ -31,7 +31,7 @@ class AddClassButton extends Component {
   render() {
     return(
         <button
-          className = "AddClassButton"
+          className = "Submitbutton"
           onClick = {this.props.onClick}
         >
           Add Class
@@ -162,13 +162,17 @@ class ClassList extends Component {
     return(
       <ul>
         {this.props.items.map( item => (
+          <div>
+          <br/>
           <button 
-            className = "classButton"
+            className = "Submitbutton"
             key = {item.text}
             onClick = {() => this.handleClick(item.text)}
           >
             {item.text}
           </button>
+          <br/>
+          </div>
         ))}
       </ul>
     );
@@ -342,17 +346,24 @@ class App extends Component {
     console.log( "Pulling student roster for: " + chosenClass );
 
     api.getAttendance( chosenClass ).then(data => {
-      console.log("getRoster():")
+      console.log("getAttendance():")
       console.log(data.data)
       var rosterCSV = data.data
 
       //this.setState({ Roster: data.data });
-
+      var fileName = chosenClass + ".csv"
       //Output .csv file for browser download
-      const element= (<CSVDownload data={rosterCSV} target="_blank" />);
- 
-      ReactDOM.render(element, document.querySelector('#app'));
+      const element= (<CSVDownload data={rosterCSV} filename={fileName} target="_blank" />);
 
+      console.log("CSV length:" + rosterCSV.length)
+
+      if(rosterCSV.length == 0){
+        console.log("Empty class download attempted")
+      }
+      else{
+        ReactDOM.render(element, document.querySelector('#tempFileIO'));
+      }
+      
       //<CSVDownload data={rosterCSV} target="_blank" />;
 
     });
@@ -413,6 +424,7 @@ class App extends Component {
               items = {this.state.items}
               onClick = {i => this.handleSelectedClass(i)}
             />
+            <div id="tempFileIO"/>
 			      <br/>
             <div hidden = {!this.state.DragAndDropHidden} >
               <AddClassButton
