@@ -105,8 +105,8 @@ function addAttendanceDay(courseName, courseDate) {
       .catch(error => console.error(error));
 }
 
-function addStudent(uin, firstName, lastName) {
-  callApi('http://ec2-18-222-100-183.us-east-2.compute.amazonaws.com:3001/api/student/', {uin: uin, first: firstName, last: lastName}, "POST")
+function addStudent(uin, firstName, lastName, courseName) {
+  callApi('http://ec2-18-222-100-183.us-east-2.compute.amazonaws.com:3001/api/student/', {uin: uin, first: firstName, last: lastName, course: courseName}, "POST")
       .then(data => console.log(data.message))
       .catch(error => console.error(error));
 }

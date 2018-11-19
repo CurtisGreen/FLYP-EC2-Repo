@@ -357,24 +357,20 @@ class App extends Component {
       
       for (var i=1;i<all_lines.length;i++) {
         var data = all_lines[i].split(',');
-        last_name_list.push(data[0]);
-        first_name_list.push(data[1]);
-        uin_list.push(data[3]);
+        if(data[3] != null){
+          last_name_list.push(data[0]);
+          first_name_list.push(data[1]);
+          uin_list.push(data[3]);
+        }
       }
       ///////////////
+
 
       api.addClass(ClassInfo, this.state.UNval);
       let functionArr = []; 
 
-      for(var i = 0; i < last_name_list.length; i++){
-
-        setTimeout(api.addStudent.bind(null, uin_list[i], first_name_list[i], last_name_list[i]), i*10000);
-        setTimeout(api.addStudentToClass.bind(null, ClassInfo, uin_list[i]), i*10000+1000);
-
-        console.log(uin_list[i] + "," + first_name_list[i] + "," + last_name_list[i])
-      }
-
-      //Promise.all(functionArr).then(stuff => stuff.map(res => console.log(res)));
+    
+        api.addStudent(uin_list, first_name_list, last_name_list, ClassInfo);
 
       this.setState( prevState => ({ 
           DragAndDropHidden: !prevState.DragAndDropHidden,
