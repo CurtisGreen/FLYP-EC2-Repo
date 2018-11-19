@@ -12,8 +12,6 @@ import * as api from "./apiCalls.js";
 import { CSVLink, CSVDownload } from "react-csv";
 import ReactDOM from 'react-dom';
 
-var stringify = require('csv-stringify');
-
 class Submitbutton extends Component {
 
   render() {
@@ -33,7 +31,7 @@ class AddClassButton extends Component {
   render() {
     return(
         <button
-          className = "Submitbutton"
+          className = "ShowClassUpload"
           onClick = {this.props.onClick}
         >
           Add Class
@@ -108,17 +106,17 @@ class AddClassInfoBoxes extends Component {
     return(
       <div>
         <textarea
-          className = "AddClassName"
+          className = "ClassInfoTextArea"
           placeholder = "xxxx"
           onChange = {this.props.onClassNameChange}
         />
         <textarea
-          className = "AddClassName"
+          className = "ClassInfoTextArea"
           placeholder = "xxx"
           onChange = {this.props.onClassNumChange}
         />
         <textarea
-          className = "AddClassName"
+          className = "ClassInfoTextArea"
           placeholder = "xxx"
           onChange = {this.props.onClassSecChange}
         />
@@ -135,17 +133,17 @@ class ProfNameBoxes extends Component {
         <h2> Enter your first name, last name, and UIN to continute </h2>
         <br/>
         <textarea
-          className = "AddProfFirstName"
+          className = "ProfTextArea"
           placeholder = "First Name"
           onChange = {this.props.handleProfFirstNameChange}
         />
         <textarea
-          className = "AddProfLastName"
+          className = "ProfTextArea"
           placeholder = "Last Name"
           onChange = {this.props.handleProfLastNameChange}
         />
         <textarea
-          className = "AddProfUIN"
+          className = "ProfTextArea"
           placeholder = "UIN"
           onChange = {this.props.handleProfUINChange}
         />
@@ -308,10 +306,10 @@ class App extends Component {
   handleCSVSubmit(CSVarray) {
     var ClassInfo = this.state.ClassName + "_" + this.state.ClassNum + "_" + this.state.ClassSec;
     
-    console.log( "Class Info Submitted:" + ClassInfo);
+    //console.log( "Class Info Submitted:" + ClassInfo);
 
-    var rawCSV = JSON.stringify(CSVarray);
-    console.log(rawCSV);
+    //var rawCSV = JSON.stringify(CSVarray);
+    //console.log(rawCSV);
 
     /*
     // parse_csv code below
