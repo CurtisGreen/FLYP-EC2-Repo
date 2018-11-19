@@ -47,6 +47,7 @@ class DragAndDrop extends Component {
       accepted: [],
       rejected: [],
       rawCSV: "",
+      fileNameOutput: ""
     }
   }
 
@@ -63,6 +64,11 @@ class DragAndDrop extends Component {
     reader.onerror = () => console.log('file reading error');
     
     reader.readAsText(files[0])
+
+    console.log("Get Filename: ")
+    console.log(files[0].name)
+
+    this.setState({fileNameOutput: "File Uploaded: " + files[0].name})
 
     // GIVE readAsText to master App
 
@@ -83,18 +89,9 @@ class DragAndDrop extends Component {
           </Dropzone>
         </div>
         <aside>
-          <h2>Accepted files</h2>
-          <ul>
-            {
-              this.state.accepted.map(f => <li key={f.name}>{f.name} - {f.size} bytes</li>)
-            }
-          </ul>
-          <h2>Rejected files</h2>
-          <ul>
-            {
-              this.state.rejected.map(f => <li key={f.name}>{f.name} - {f.size} bytes</li>)
-            }
-          </ul>
+          <br/>
+          <p> {this.state.fileNameOutput} </p>
+          <br/>
           <Submitbutton
             onClick = {(CSVarray) => this.props.onClick(CSVarray)}
           >
@@ -174,7 +171,12 @@ class ProfNameBoxes extends Component {
 }
 
 class ClassList extends Component {
-
+  constructor() {
+    super()
+    this.state = {
+      message: ""
+    }
+  }
   handleClick(i) {
     this.props.onClick(i);
   }
@@ -183,8 +185,7 @@ class ClassList extends Component {
     return(
       <ul>
         {this.props.items.map( item => (
-          <div>
-          <br/>
+          
           <button 
             className = "ClassButton"
             key = {item.text}
@@ -192,8 +193,7 @@ class ClassList extends Component {
           >
             {item.text}
           </button>
-          <br/>
-          </div>
+          
         ))}
       </ul>
     );
@@ -520,7 +520,6 @@ class App extends Component {
           >
           	<center>
           	<br/>
-          	<p> Class List Here </p>
             <ClassList
               items = {this.state.items}
               onClick = {i => this.handleSelectedClass(i)}
