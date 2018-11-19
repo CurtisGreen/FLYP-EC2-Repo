@@ -125,17 +125,17 @@ class AddClassInfoBoxes extends Component {
       <div>
         <textarea
           className = "ClassInfoTextArea"
-          placeholder = "xxxx"
+          placeholder = "Dept. Name (XXXX)"
           onChange = {this.props.onClassNameChange}
         />
         <textarea
           className = "ClassInfoTextArea"
-          placeholder = "xxx"
+          placeholder = "Course Number (XXX)"
           onChange = {this.props.onClassNumChange}
         />
         <textarea
           className = "ClassInfoTextArea"
-          placeholder = "xxx"
+          placeholder = "Section Number (XXX)"
           onChange = {this.props.onClassSecChange}
         />
       </div>
