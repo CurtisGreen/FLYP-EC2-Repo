@@ -48,7 +48,7 @@ router.route('/student')
 	// Add new student
 	.post(function(req, res) {
 		api_funcs.add_student(req.body.uin, req.body.first, req.body.last);
-		res.json({message: 'Success'});
+		
 	})
 
 	// Add student to class
@@ -61,7 +61,7 @@ router.route('/professor')
 	// Add new professor
 	.post(function(req, res) {
 		api_funcs.add_professor(req.body.uin, req.body.first, req.body.last);
-		
+		res.json({message: 'Success'});
 	})
 
 	// Get list of professors
@@ -119,9 +119,8 @@ router.route('/roster/:course_name')
 // Updates the RFID/Card for professor/student
 router.route('/card')
 	.put(function(req, res) {
-		api_funcs.update_card(req.body.uin, req.body.card).then(data => {
-			res.json({data: data});
-		});
+		api_funcs.update_card(req.body.uin, req.body.card);
+		res.json({message: 'Success'});
 	});
 
 // Send prof data

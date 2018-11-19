@@ -37,7 +37,8 @@ sql_conn.connect( function(err){
 	setTimeout( get_num_attended.bind(null, stud_uin, course_name), 900);
 	setTimeout( get_num_class_days.bind(null, course_name), 1000);*/
 	
-
+	//insert_course("ENGR_483_501", prof_uin);
+	//create_attendance_table("ENGR_483_501");
 	//get_attendance(course_name);
 	//get_courses(prof_uin);
 	//get_roster(course_name);
@@ -144,7 +145,12 @@ function add_date_column(date, table_name){
 	sql_queries.add_date_column(date, table_name).then(query => {
 		sql_conn.query(query, function(error, results, fields){
 			if (error) {
-				console.error(error);
+				if (error.code == 'ER_DUP_FIELDNAME'){
+					console.log("Warning: class opened twice in one day");
+				}
+				else {
+					console.error(error);
+				}
 			}
 			else {
 				inc_course_days(table_name);
@@ -252,6 +258,9 @@ let get_attendance = (course_name) => {
 					console.error(error);
 					resolve(-1);
 				}
+				else if (results.length == 0){
+					resolve(results);
+				}
 				else {
 					console.log("\nCourse results for " + course_name + " returned");
 					parse_attendance_table(results).then(csvOutput => {
@@ -306,7 +315,6 @@ function update_card(uin, card){
 		
 		// Determine card/rfid
 		if (card.length > 10){
-			console.log("length");
 			isCard = true;
 		}
 		else {
