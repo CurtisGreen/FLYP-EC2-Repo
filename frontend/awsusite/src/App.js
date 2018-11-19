@@ -12,6 +12,8 @@ import * as api from "./apiCalls.js";
 import { CSVLink, CSVDownload } from "react-csv";
 import ReactDOM from 'react-dom';
 
+var stringify = require('csv-stringify');
+
 class Submitbutton extends Component {
 
   render() {
@@ -111,12 +113,12 @@ class AddClassInfoBoxes extends Component {
           onChange = {this.props.onClassNameChange}
         />
         <textarea
-          className = "AddClassNum"
+          className = "AddClassName"
           placeholder = "xxx"
           onChange = {this.props.onClassNumChange}
         />
         <textarea
-          className = "AddClassSec"
+          className = "AddClassName"
           placeholder = "xxx"
           onChange = {this.props.onClassSecChange}
         />
@@ -281,11 +283,56 @@ class App extends Component {
     //this.setState( prevState => { phase1hidden: !prevState.phase1hidden } );
   }
 
+  parse_csv(infile) {
+  
+  var all_lines = infile.split("\n");
+  var col_headers = all_lines[0].split(',');
+  var lines = [];
+  /*1-last name, 2-first-name, 4-uin*/
+  var last_name_list = [];
+  var first_name_list = [];
+  var uin_list = [];
+  
+  
+  for (var i=1;i<all_lines.length;i++) {
+    var data = all_lines[i].split(',');
+    last_name_list.push(data[0]);
+    first_name_list.push(data[1]);
+    uin_list.push(data[3]);
+  }
+
+
+  
+  }
+
   handleCSVSubmit(CSVarray) {
     var ClassInfo = this.state.ClassName + "_" + this.state.ClassNum + "_" + this.state.ClassSec;
     
     console.log( "Class Info Submitted:" + ClassInfo);
-    console.log( "CSV Submitted", CSVarray );
+
+    var rawCSV = JSON.stringify(CSVarray);
+    console.log(rawCSV);
+
+    /*
+    // parse_csv code below
+     var all_lines = infile.split("\n");
+      var col_headers = all_lines[0].split(',');
+      var lines = [];
+      /*1-last name, 2-first-name, 4-uin
+      var last_name_list = [];
+      var first_name_list = [];
+      var uin_list = [];
+      
+      
+      for (var i=1;i<all_lines.length;i++) {
+        var data = all_lines[i].split(',');
+        last_name_list.push(data[0]);
+        first_name_list.push(data[1]);
+        uin_list.push(data[3]);
+      }
+      ///////////////
+    */
+
   }
 
   handleNewProfSubmit() {
