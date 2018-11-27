@@ -19,24 +19,19 @@ sql_conn.connect( function(err){
 	// Test params 
 	let stud_uin = 123001234;
 	let prof_uin = 999009999;
-	let course_name = "CSCE_121_500";
+	let course_name = "CSCE_333_333";
 	let date = "2018_11_05";
 
 	// Tests for functions
 	//add_student(stud_uin, "stud_first", "stud_last");
 	//setTimeout( populate_course.bind(null, course_name, stud_uin), 400);
-	/*setTimeout( add_professor.bind(null, prof_uin, "prof_first", "prof_last"), 100);
-	setTimeout( insert_course.bind(null, course_name, prof_uin), 200);
-	setTimeout( get_courses.bind(null, prof_uin), 250);
-	setTimeout( create_attendance_table.bind(null, course_name), 300);
-	setTimeout( populate_course.bind(null, course_name, stud_uin), 400);
-	setTimeout( add_date_column.bind(null, date, course_name), 500);
+	//setTimeout( add_professor.bind(null, prof_uin, "prof_first", "prof_last"), 100);
+	//setTimeout( insert_course.bind(null, course_name, prof_uin), 200);
+	//setTimeout( get_courses.bind(null, prof_uin), 250);
+	//setTimeout( create_attendance_table.bind(null, course_name), 300);
+	//setTimeout( populate_course.bind(null, course_name, stud_uin), 400);
+	//setTimeout( add_date_column.bind(null, date, course_name), 500);
 	setTimeout( update_attendance.bind(null, stud_uin, course_name, date), 600);
-	setTimeout( inc_days_attended.bind(null, stud_uin, course_name), 700);
-	setTimeout( inc_course_days.bind(null, course_name), 800);
-	setTimeout( get_num_attended.bind(null, stud_uin, course_name), 900);
-	setTimeout( get_num_class_days.bind(null, course_name), 1000);*/
-	
 	//insert_course("ENGR_483_501", prof_uin);
 	//create_attendance_table("ENGR_483_501");
 	//get_attendance(course_name);
@@ -44,6 +39,8 @@ sql_conn.connect( function(err){
 	//get_roster(course_name);
 	//check_professor_exists(prof_uin);
 	//update_card(prof_uin, "123");
+
+	//update_attendance(stud_uin, course_name, date);
 
 });
 
@@ -175,8 +172,49 @@ function add_date_column(date, table_name){
 
 }
 
+// Set student as att, increase days att, return days att
+let update_attendance = (uin, course_name, date) => {
+	return new Promise ((resolve, reject) => {
+		check_student_already_attended(uin, course_name, date).then(attended => {
+			if (!attended) {
+				set_attendance(uin, course_name, date);
+				inc_days_attended(uin, course_name);
+			}
+		});
+		get_num_class_days(course_name).then(num_days => {
+			get_num_attended(uin, course_name).then(num_att => {
+				resolve({num_attended: num_att, num_class_days: num_days});
+			});
+		});
+	});
+}
+
+let check_student_already_attended = (uin, course_name, date) => {
+	return new Promise ((resolve, reject) => {
+		sql_queries.check_student_already_attended(uin, course_name, date).then(query => {
+			sql_conn.query(query, function (error, results, fields){
+				if (error) {
+					console.error(error);
+				}
+				else {
+					// Already swiped for this class
+					if (results[0][date] == 1){
+						console.log("Warning: Student " + uin + " swiped twice in one day");
+						resolve (true);
+					}
+					// First time
+					else {
+						resolve(false);
+					}
+				}
+			});
+		});
+	});
+}
+
+
 // Set a student as present
-function update_attendance(uin, course_name, date){
+function set_attendance(uin, course_name, date){
 
 	sql_queries.update_attendance(uin, course_name, date).then(query => {
 		sql_conn.query(query, function (error, results, fields){
@@ -328,11 +366,15 @@ function update_card(uin, card){
 	if (uin != null && card != null){
 		
 		// Determine card/rfid
-		if (card.length > 10){
+		if (card[0] == "m"){
 			isCard = true;
 		}
-		else {
+		else if (card[0] == "r") {
 			isRfid = true;
+		}
+		else {
+			console.log("Warning: RFID/Card has neither 'm' nor 'r'");
+			return;
 		}
 		// Determine prof/student
 		check_professor_exists(uin).then(isProf => {
@@ -358,7 +400,7 @@ function update_card(uin, card){
 		});
 	}
 	else {
-		console.log("Update Card: UIN or card is NULL");
+		console.log("Warning: Update Card: UIN or card is NULL");
 	}
 }
 

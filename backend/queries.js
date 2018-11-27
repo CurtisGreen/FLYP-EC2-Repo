@@ -49,7 +49,7 @@ let create_attendance_table = (class_name) => {
 
 		resolve("CREATE TABLE IF NOT EXISTS Capstone." + class_name + `
 			( 
-				uin CHAR(9),
+				uin CHAR(9) UNIQUE,
 				classes_attended int(3) DEFAULT 0,
 				FOREIGN KEY (uin) REFERENCES Capstone.students(uin) 
 			);
@@ -151,32 +151,32 @@ let get_roster = (course_name) => {
 let update_student_rfid = (uin, rfid) => {
 	return new Promise ((resolve, reject) => {
 		resolve(`UPDATE Capstone.students
-					SET rfidNum = ` + rfid + 
-					" WHERE uin = " + uin + ";");
+					SET rfidNum = '` + rfid + 
+					"' WHERE uin = " + uin + ";");
 	});
 }
 
 let update_professor_rfid = (uin, rfid) => {
 	return new Promise ((resolve, reject) => {
 		resolve(`UPDATE Capstone.professors
-					SET rfidNum = ` + rfid + 
-					" WHERE uin = '" + uin + "';");
+					SET rfidNum = '` + rfid + 
+					"' WHERE uin = '" + uin + "';");
 	});
 }
 
 let update_student_card = (uin, card) => {
 	return new Promise ((resolve, reject) => {
 		resolve(`UPDATE Capstone.students
-					SET cardNum = ` + card + 
-					" WHERE uin = '" + uin + "';");
+					SET cardNum = '` + card + 
+					"' WHERE uin = '" + uin + "';");
 	});
 }
 
 let update_professor_card = (uin, card) => {
 	return new Promise ((resolve, reject) => {
 		resolve(`UPDATE Capstone.professors
-					SET cardNum = ` + card + 
-					" WHERE uin = '" + uin + "';");
+					SET cardNum = '` + card + 
+					"' WHERE uin = '" + uin + "';");
 	});
 }
 
@@ -198,6 +198,15 @@ let check_student_exists = (uin) => {
 	});
 }
 
+let check_student_already_attended = (uin, course_name, date) => {
+	return new Promise ((resolve, reject) => {
+		resolve ("SELECT " + date + 
+					" FROM Capstone." + course_name + 
+					" WHERE uin='" + uin + "';"
+				)
+	})
+}
+
 let get_professors = new Promise((resolve, reject) => {
 	resolve("Select * FROM Capstone.professors;");
 });
@@ -209,5 +218,5 @@ module.exports = {
 	inc_course_days, get_num_attended, get_num_class_days, get_attendance,
 	get_courses, get_roster, update_student_rfid, update_professor_rfid,
 	update_student_card, update_professor_card, check_professor_exists, 
-	check_student_exists, get_professors
+	check_student_exists, get_professors, check_student_already_attended
 };

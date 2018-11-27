@@ -94,13 +94,9 @@ router.route('/professor/:uin/exists')
 // Set a student's attendance and return num attended
 router.route('/attendance')
 	.put(function(req, res) {
-		api_funcs.update_attendance(req.body.uin, req.body.course_name, req.body.date);
-		api_funcs.inc_days_attended(req.body.uin, req.body.course_name);
-		api_funcs.get_num_attended(req.body.uin, req.body.course_name).then(num_att => {
-			api_funcs.get_num_class_days(req.body.course_name).then(num_days => {
-				res.json({num_attended: num_att, num_class_days: num_days});
-			});
-		});
+		api_funcs.update_attendance(req.body.uin, req.body.course_name, req.body.date).then(data => {
+			res.json({num_attended: data.num_attended, num_class_days: data.num_class_days});
+		})
 	})
 
 // Get attendance table
