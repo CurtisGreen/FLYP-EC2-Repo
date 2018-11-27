@@ -78,7 +78,7 @@ class DragAndDrop extends Component {
       <section>
         <div className="dropzone">
           <Dropzone
-            accept="image/jpeg, image/png, text/csv, application/vnd.ms-excel"
+            accept="image/jpeg, image/png, text/csv, application/vnd.ms-excel, text/*, application/*"
             onDrop={this.onDrop.bind(this)}
         
           >
