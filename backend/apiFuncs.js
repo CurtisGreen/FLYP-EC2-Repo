@@ -31,7 +31,7 @@ sql_conn.connect( function(err){
 	//setTimeout( create_attendance_table.bind(null, course_name), 300);
 	//setTimeout( populate_course.bind(null, course_name, stud_uin), 400);
 	//setTimeout( add_date_column.bind(null, date, course_name), 500);
-	setTimeout( update_attendance.bind(null, stud_uin, course_name, date), 600);
+	//setTimeout( update_attendance.bind(null, stud_uin, course_name, date), 600);
 	//insert_course("ENGR_483_501", prof_uin);
 	//create_attendance_table("ENGR_483_501");
 	//get_attendance(course_name);
