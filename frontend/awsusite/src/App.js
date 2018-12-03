@@ -436,23 +436,31 @@ class App extends Component {
     api.getAttendance( chosenClass ).then(data => {
       console.log("getAttendance():")
       console.log(data.data)
-      var rosterCSV = data.data
+      let rosterCSV = data.data
 
       //this.setState({ Roster: data.data });
-      var fileName = chosenClass + ".csv"
-      //Output .csv file for browser download
-      const element= (<CSVDownload data={rosterCSV} filename={fileName} target="_blank" />);
+      let fileName = chosenClass + ".csv"
 
       console.log("CSV length:" + rosterCSV.length)
 
+      // No CSV
       if(rosterCSV.length == 0){
         console.log("Empty class download attempted")
       }
+      // Download CSV
       else{
-        ReactDOM.render(element, document.querySelector('#tempFileIO'));
+        let a = window.document.createElement('a');
+				a.href = window.URL.createObjectURL(new Blob([rosterCSV], {type: 'text/csv'}));
+				a.download = fileName;
+
+				// Append anchor to body.
+				document.body.appendChild(a);
+				a.click();
+
+				// Remove anchor from body
+				document.body.removeChild(a);
       }
-      
-      //<CSVDownload data={rosterCSV} target="_blank" />;
+			
 
     });
     
