@@ -1,7 +1,7 @@
 # FLYP-EC2-Repo
 Database for FLYP capstone project
 
-#### Setup:
+### Setup:
 
 Schema:
 
@@ -17,7 +17,7 @@ pm2 start backend/server.js --name "API"
 // If that doesn't work do this first: npm install pm2 -g
 ```
 
-#### Control:
+### Control:
 ```
 pm2 list // Shows status
 pm2 start API
@@ -25,11 +25,11 @@ pm2 restart API
 pm2 stop API
 ```
 
-#### Use:
+### Use:
 
 * API on `localhost:3001/api/` or `http://ec2-18-222-100-183.us-east-2.compute.amazonaws.com:3001/api/`
 
-#### API functions
+### API functions
 | Path | Type | Input | Output | Desc |
 |---   | ---  |---    | ---    |---   |
 |  `/class/` | POST | course_name, uin |  | Add new course and assign prof to it|
