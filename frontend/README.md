@@ -8,7 +8,7 @@ npm install
 pm2 start node_modules/react-scripts/scripts/start.js --name Webapp
 ```
 
-#### Control
+### Control
 ```
 pm2 list // Shows status
 pm2 start API
