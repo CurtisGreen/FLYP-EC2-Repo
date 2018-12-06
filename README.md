@@ -1,5 +1,7 @@
 # FLYP Professor Portal & Backend
 
+![logo](documentation/FLYP.png)
+
 ### [Backend Readme](backend/README.md)
 * API called by the webapp and Raspberry Pi device
 
