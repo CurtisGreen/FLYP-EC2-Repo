@@ -6,7 +6,7 @@ API and database for FLYP
 Schema:
 
 0) (Might need to install & run MySQL/MariaDB)
-1) [connect to DB through MySQL workbench](backendSetup.md)
+1) [Connect to DB through MySQL workbench](backendSetup.md)
 2) Run schema.sql
 
 
