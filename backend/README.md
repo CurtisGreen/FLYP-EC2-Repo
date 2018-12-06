@@ -1,5 +1,5 @@
 # FLYP-EC2-Repo
-Database for FLYP capstone project
+API and database for FLYP
 
 ### Setup:
 
