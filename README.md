@@ -2,6 +2,8 @@
 
 ![logo](documentation/FLYP.png)
 
+Access the webapp [here](http://ec2-18-222-100-183.us-east-2.compute.amazonaws.com:3000/)
+
 ### [Backend Readme](backend/README.md)
 * API called by the webapp and Raspberry Pi device
 
