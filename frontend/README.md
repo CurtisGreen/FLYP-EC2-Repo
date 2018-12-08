@@ -11,9 +11,9 @@ pm2 start node_modules/react-scripts/scripts/start.js --name Webapp
 ### Control
 ```
 pm2 list // Shows status
-pm2 start API
-pm2 restart API
-pm2 stop API
+pm2 start Webapp
+pm2 restart Webapp
+pm2 stop Webapp
 ```
 
 ### Notes
