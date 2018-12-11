@@ -548,7 +548,6 @@ class App extends Component {
                  CSVtoText = {i => this.setCSVtoText(i)}
               />
             </div>
-            <h3> Please disable your popup blocker to download files </h3>
           	</center>
           </div>
         </div>
