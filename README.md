@@ -12,3 +12,6 @@ Access the webapp [here](http://ec2-18-222-100-183.us-east-2.compute.amazonaws.c
 
 ### [Device Repository](https://github.com/collier-watkins/FLYP-Pi-Repo)
 * An electron app for taking attendance 
+
+### [Hardware Repository](https://github.com/collier-watkins/FLYP-Hardware)
+* Hardware specifications and 3D case design for the device
