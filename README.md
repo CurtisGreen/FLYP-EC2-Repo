@@ -15,3 +15,5 @@ Access the webapp [here](http://ec2-18-222-100-183.us-east-2.compute.amazonaws.c
 
 ### [Hardware Repository](https://github.com/collier-watkins/FLYP-Hardware)
 * Hardware specifications and 3D case design for the device
+
+Video demo [here](https://youtu.be/v-o1V0g9zXk)
